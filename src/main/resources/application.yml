@@ -1,3 +1,17 @@
 Spring:
   datasource:
+    url:
+    username:
+    password:
+  web:
+    resources:
+      static-locations: classpath:/static/
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 200MB
+server:
+  servlet:
+    session:
+      timeout: 120m
 
