@@ -42,19 +42,19 @@ public class GlobalExceptionHandler {
     }
 
     //Exception 是所有异常的父类
-//    @ExceptionHandler(Exception.class)
-//    public JsonResult handleException(Exception e){
-//        System.out.println("发生了Exception异常: " + e.getMessage());
-//        e.printStackTrace();
-//        return new JsonResult(StatusCode.OPERATION_FAILED, "系统错误，请稍后重试");
-//    }
+    @ExceptionHandler(Exception.class)
+    public JsonResult handleException(Exception e){
+        System.out.println("发生了Exception异常: " + e.getMessage());
+        e.printStackTrace();
+        return new JsonResult(StatusCode.OPERATION_FAILED, "系统错误，请稍后重试");
+    }
 
     //Throwable 是所有错误和异常的超类
-//    @ExceptionHandler(Throwable.class)
-//    public JsonResult handleThrowable(Throwable t){
-//        System.out.println("程序运行过程中出现错误: " + t.getMessage());
-//        t.printStackTrace();
-//        return new JsonResult(StatusCode.OPERATION_FAILED, "系统错误，请稍后重试");
-//    }
+    @ExceptionHandler(Throwable.class)
+    public JsonResult handleThrowable(Throwable t){
+        System.out.println("程序运行过程中出现错误: " + t.getMessage());
+        t.printStackTrace();
+        return new JsonResult(StatusCode.OPERATION_FAILED, "系统错误，请稍后重试");
+    }
 
 }

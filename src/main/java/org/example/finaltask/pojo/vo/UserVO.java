@@ -7,6 +7,13 @@ public class UserVO {
     private String nickname;
     private String imgUrl;
 
+    public UserVO(Long id, String username, String password, String nickname) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.nickname = nickname;
+    }
+
     public Long getId() {
         return id;
     }

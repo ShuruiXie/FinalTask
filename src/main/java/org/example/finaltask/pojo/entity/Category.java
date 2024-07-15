@@ -1,5 +1,6 @@
 package org.example.finaltask.pojo.entity;
 
+//entity为实体类，每一个类对应数据库里的一张表
 public class Category {
     private Long id;
     private String name;

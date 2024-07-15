@@ -19,3 +19,12 @@ Content-Type: application/json
   "password": "123456",
   "nickname": "ikun"
 }
+
+###
+GET localhost:8080/v1/contents/1/management?type=1
+Content-Type: application/json
+
+{
+  "username": "Jack",
+  "password": "123456"
+}

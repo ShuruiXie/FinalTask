@@ -1,5 +1,6 @@
 package org.example.finaltask.pojo.vo;
 
+//userVO 封装后端查询的数据 并返回给前端的类 统称为XXXVO类 给后端用
 public class CategoryVO {
     private Long id;
     private String name;

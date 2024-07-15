@@ -4,9 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.example.finaltask.mapper.CategoryMapper">
+<!--     搜索二级分类-->
     <select id="selectCategoryByType" resultType="org.example.finaltask.pojo.vo.CategoryVO">
         SELECT id, name
-        FROM t_category
+        FROM category
         WHERE type = #{type}
         AND level = 2
     </select>

@@ -7,9 +7,6 @@ import java.util.List;
 
 @Mapper
 public interface CategoryMapper {
-
-
+    // 根据类型（第一级）查询分类
     List<CategoryVO> selectCategoryByType(Integer type);
-
-
 }

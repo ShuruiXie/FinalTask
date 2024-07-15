@@ -4,32 +4,33 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.example.finaltask.mapper.UserMapper">
+<!--    插入用户-->
     <insert id="insertUser">
         INSERT INTO user (user_name,password,nick_name)
         VALUES (#{username},#{password},#{nickname})
     </insert>
 
+<!--    通过用户名查询用户信息-->
     <select id="selectUserByUsername" resultType="org.example.finaltask.pojo.vo.UserVO">
-        SELECT id,user_name,password,nick_name,img_url
+        SELECT id,user_name,password,nick_name,img_url,email
         FROM user
         WHERE user_name = #{username}
     </select>
-
+<!--    根据id更新用户信息-->
     <update id="updateUserById">
          UPDATE user
          <set>
              <if test="nickname != null and nickName != ''">nick_name=#{nickname},</if>
              <if test="imgUrl != null and imgUrl != ''">img_url=#{imgUrl}</if>
+             <if test="email != null and email != ''">email=#{email}</if>
          </set>
     </update>
 
+<!--    根据id查询用户头像-->
     <select id="selectImgUrlById" resultType="string">
         SELECT img_url
         FROM user
         WHERE id = #{id}
     </select>
-    
-    <select id="selectAllUser">
 
-    </select>
 </mapper>

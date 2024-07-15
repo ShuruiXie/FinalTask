@@ -8,7 +8,9 @@ import java.util.List;
 
 @Mapper
 public interface CommentMapper {
-
+    // 插入评论
     void insertComment(Comment comment);
+
+    // 根据内容id查询评论
     List<CommentVO> selectCommentByContentId(Long contentId);
 }
