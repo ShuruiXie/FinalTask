@@ -6,19 +6,16 @@
     <title>Create Account</title>
     <!-- import CSS -->
     <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.15.9/theme-chalk/index.css">
-    <!-- import Vue -->
-    <script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
-    <!-- import Element UI -->
-    <script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
-    <!-- import Axios -->
-    <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
-    <style>
-        .header {
 
+    <style>
+        .header{
+            background-color: #409EFF;
+            line-height: 60px;
         }
-        .main {
-            width: 1200px;
-            margin:0 auto
+
+        .main{
+            width: 700px;
+            margin: 0 auto;
         }
 
         .el-input__inner {
@@ -26,11 +23,10 @@
             border: 1px solid #ccc !important; /* 强制覆盖默认边框 */
         }
 
-
+        .rounded-input{
+            border-radius: 15px !important;
+        }
     </style>
-
-
-
 
 </head>
 
@@ -49,39 +45,36 @@
                 </el-col>
             </el-row>
         </el-header>
-        <el-main class="main" style="margin-top: 40px; border-radius: 80px; box-shadow: 20px 20px 20px 20px rgba(0, 0, 0, 0.05);width: 700px;height: 410px;">
-            <el-row gutter="10">
-<!--                <el-col span="12">-->
-<!--                    <img src="imgs/imgForReg.png" width="100%" style="padding-block: 5px;border-radius: 50px;margin-top: 70px; rgba(0,0,0,0.5)">-->
-<!--                </el-col>-->
+        <el-main class="main" style="margin-top: 40px; border-radius: 80px; box-shadow: 20px 20px 20px 20px rgba(0, 0, 0, 0.05);height: 410px;">
+            <el-row>
                 <el-col span="15" style="margin-left: 125px">
                     <el-form>
                         <el-form-item>
-                            <a style="float:left;text-decoration: none;color: #a6bed7;position: relative;margin-top: 30px" href="/login.html">Already have an account? Log in now</a>
+                            <a style="float:left;text-decoration: none;color: #a6bed7;position: relative;margin-top: 30px" href="login.html">Already have an account? Log in now</a>
                         </el-form-item>
                         <el-form-item>
-                            <el-input type="password" placeholder="username" v-model="user.username" class="rounded-input"></el-input>
+                            <el-input type="username" placeholder="USERNAME" v-model="user.username" class="rounded-input"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-input type="password" placeholder="password" v-model="user.password" class="rounded-input"></el-input>
+                            <el-input type="password" placeholder="PASSWORD" v-model="user.password" class="rounded-input"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-input placeholder="nickname" v-model="user.nickname" class="rounded-input"></el-input>
+                            <el-input type="nickname" placeholder="NICKNAME" v-model="user.nickname" class="rounded-input"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" style="border-radius: 15px;margin-left: 300px"@click="reg()">registered</el-button>
+                            <el-button type="primary" style="border-radius: 15px;margin-left: 300px"@click="reg()">Sign Up</el-button>
                         </el-form-item>
                     </el-form>
                 </el-col>
             </el-row>
         </el-main>
 
-        <el-footer style=" height: 250px; margin-top: 40px;background-color: #d9e7ed;">
-            <div class="main" style="color: darkgray;text-align:left;">
+        <el-footer class="footer" style=" height: 250px; margin-top: 40px;background-color: #d9e7ed;">
+            <div class="FooterDiv" style="color: darkgray;text-align:left;width: 1200px;margin:0 auto">
                 <el-row style="margin-left: 150px">
                     <el-col span="16" style="margin-top: 20px; width: 170px">
                         <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">User Service</p>
-                        <p  style="font-size: small;margin-top: 0;margin-bottom: 10px">User Agreement</p>
+                        <p style="font-size: small;margin-top: 0;margin-bottom: 10px">User Agreement</p>
                         <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Privacy Policy</p>
                         <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Rights Protection</p>
                         <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Online Service</p>
@@ -109,7 +102,8 @@
                         <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Africa：+86 400-000-0000</p>
                     </el-col>
                     <el-col span="5" style="margin-top: 20px;width: 170px">
-                        <img src="imgs/imgForFooter.png" width="78.6px" height="78.3px">
+                        <img src="imgs/imgForFooter.png" width="78.6px" height="78.3px"><br>
+                        <img src="imgs/imgForPay.png" width="78.6px" height="78.3px">
                     </el-col>
                 </el-row>
                 <el-row>
@@ -119,6 +113,12 @@
         </el-footer>
     </el-container>
 </div>
+<!-- import Vue -->
+<script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
+<!-- import Element UI -->
+<script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
+<!-- import Axios -->
+<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
 <script>
     let v=new Vue({
         el: '#app',
@@ -136,7 +136,6 @@
             reg(){
                 //发出异步post请求
                 axios.post("/v1/users/reg",v.user).then(function (response) {
-
                     if (response.data.code==1){
                         location.href="/login.html";
                     }else{
@@ -148,6 +147,7 @@
 
     })
 </script>
+
 </body>
 
 </html>

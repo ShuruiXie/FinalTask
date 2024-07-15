@@ -45,25 +45,31 @@
                     </el-button>
                 </el-col>
                 <el-col :span="16" style="text-align: center; color: aliceblue; font-family: 'Arial Black';font-size: 25px">
-                    Login
+                    Sign in
                 </el-col>
             </el-row>
         </el-header>
+
         <el-main class="main" style="margin-top: 40px; border-radius: 80px; box-shadow: 20px 20px 20px 20px rgba(0, 0, 0, 0.05);width: 700px;height: 410px;">
             <el-row gutter="10">
-                <el-col span="15" style="margin-left: 125px">
-                    <el-form style="margin-top: 20px">
-                        <el-form-item>
-                            <h1 style="margin-bottom: 10px; font-size: 40px">Sign in to unlock <br>the best experience!</h1>
+                <el-col span="15" style="margin-left: 175px">
+                    <el-form style="height: 200px">
+                        <el-form-item >
+                            <h1 style="font-size: 30px ;margin-bottom: 10px">Sign in to unlock <br>the best experience!</h1>
                         </el-form-item>
                         <el-form-item>
-                            <el-input type="password" placeholder="username" v-model="user.username" class="rounded-input"></el-input>
+                            <el-input type="username" v-model="username" placeholder="USERNAME" style="width: 300px"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-input type="password" placeholder="password" v-model="user.password" class="rounded-input"></el-input>
+                            <el-input type="password" v-model="password" placeholder="PASSWORD" style="width: 300px"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" style="border-radius: 15px;margin-left: 300px"@click="Login()">Sign in</el-button>
+                            <el-button type="primary" style="width: 300px;height: 40px;background-color: #409EFF;border-radius: 15px;font-size: 15px;">
+                                Sign in
+                            </el-button>
+                        </el-form-item>
+                        <el-form-item style="margin-top: 0">
+                            <p style="margin-top: 0; margin-bottom: 0">Don't have an account? <a href="reg.html" style="text-decoration: none">Sign up</a></p>
                         </el-form-item>
                     </el-form>
                 </el-col>
@@ -103,7 +109,8 @@
                         <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Africa：+86 400-000-0000</p>
                     </el-col>
                     <el-col span="5" style="margin-top: 20px;width: 170px">
-                        <img src="imgs/imgForFooter.png" width="78.6px" height="78.3px">
+                        <img src="imgs/imgForFooter.png" width="78.6px" height="78.3px"><br>
+                        <img src="imgs/imgForPay.png" width="78.6px" height="78.3px">
                     </el-col>
                 </el-row>
                 <el-row>
@@ -114,34 +121,29 @@
     </el-container>
 </div>
 <script>
-    let v=new Vue({
+    let v = new Vue({
         el: '#app',
-        data: function(){
+        data: function () {
             return{
-                user:{
-                    username:'',
-                    password:'',
-                    nickname:''
-                }
+                username: "",
+                password: ""
             }
         },
-        methods:  {
-            //注册
-            reg(){
-                //发出异步post请求
-                axios.post("/v1/users/reg",v.user).then(function (response) {
-
-                    if (response.data.code==1){
-                        location.href="/login.html";
+        methods: {
+            login() {
+                axios.post("v1/users/login", v.user).then(function (response){
+                    if(response.data.code == 1){
+                        localStorage.user = JSON.stringify(response.data.data);
+                        location.href="/";
                     }else{
                         v.$message.error(response.data.msg);
                     }
                 })
             }
         }
-
     })
 </script>
 </body>
+
 
 </html>

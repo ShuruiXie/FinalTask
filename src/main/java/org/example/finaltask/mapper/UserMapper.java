@@ -14,6 +14,7 @@ public interface UserMapper {
     int updateUserById(User user);
     String selectImgUrlById(Long id);
 
+
 //    /**
 //     * 查找user表中所有的用户记录,并将一个个的用户记录信息封装到一个个的UserAdminVO对象中
 //     * 最终返回一个集合

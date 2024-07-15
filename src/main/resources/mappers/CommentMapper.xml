@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.finaltask.mapper.CommentMapper">
+    <insert id="insertComment">
+        INSERT INTO comment(content,user_id,content_id,create_time)
+        VALUES (#{content},#{userId},#{contentId},#{createTime})
+    </insert>
+
+<select id="selectCommentByContentId" resultType="org.example.finaltask.pojo.vo.CommentVO">
+        SELECT c.id,c.content,c.create_time,u.user_id,u.nick_name,u.img_url userImgUrl
+
+        FROM comment c
+              JOIN user u ON c.user_id = u.user_id
+        WHERE content_id = #{content}
+        ORDER BY c.create_time DESC
+    </select>
+</mapper>

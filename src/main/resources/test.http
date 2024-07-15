@@ -1,0 +1,21 @@
+
+
+###
+POST localhost:8080/v1/users/login
+Content-Type: application/json
+
+
+{
+  "username": "XieShurui",
+  "password": "123456"
+}
+
+###
+POST localhost:8080/v1/users/reg
+Content-Type: application/json
+
+{
+  "username": "CaiXunkun",
+  "password": "123456",
+  "nickname": "ikun"
+}

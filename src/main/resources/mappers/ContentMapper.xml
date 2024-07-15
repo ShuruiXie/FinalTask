@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.example.finaltask.mapper.ContentMapper">
+    <insert id="insertContent">
+         insert into content(title,img_url,video_url,content,type,view_count,comment_count,create_time,create_by,update_time,update_by,create_by,category_id,create_time)
+         values (#{title},#{imgUrl},#{videoUrl},#{content},#{type},#{viewCount},#{commentCount},#{createTime},#{createBy},#{updateTime},#{updateBy},#{createBy},#{categoryId},#{createTime})
+    </insert>
+
+<select id="selectContentByTypeAndUserId" resultType="org.example.finaltask.pojo.vo.ContentManagementVO">
+    select con.id,con.title,con.img_url,con.type,con.view_count,con.comment_count,con.create_time,cat.name categortName
+    from content con
+           JSON category cat ON con.categort_id=cat.id
+    where con.create_by=#{id}
+    and con.type=#{type}
+</select>
+
+    <select id="selectUpdateInfoById" resultType="org.example.finaltask.pojo.vo.ContentUpdateVO">
+        SELECT id,
+               title,
+               img_url,
+               video_url,
+               content,
+               type,
+               create_by,
+               category_id
+        FROM content
+        WHERE id = #{id}
+    </select>
+
+    <update id="updateContentInfo">
+        UPDATE t_content
+        <set>
+            <if test="title != null and title !=''">title = #{title},</if>
+            <if test="imgUrl != null and imgUrl !=''">img_url = #{imgUrl},</if>
+            <if test="videoUrl != null and videoUrl !=''">video_url = #{videoUrl},</if>
+            <if test="type != null and type !=''">type = #{type},</if>
+            <if test="categoryId != null and categoryId !=''">category_id = #{categoryId},</if>
+            <if test="updateBy != null and updateBy !=''">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="content != null and content !=''">content = #{content}</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteContentById">
+        DELETE
+        FROM content
+        WHERE id = #{id}
+    </delete>
+
+    <select id="selectContentByTypeAndCategoryId" resultType="org.example.finaltask.pojo.vo.ContentIndexVO">
+        SELECT c.id,
+        c.title,
+        c.img_url,
+        u.nick_name,
+        u.img_url userImgUrl,
+        cat.name categoryName
+        FROM content c
+        JOIN user u ON c.create_by = u.id
+        JOIN category cat ON c.category_id = cat.id
+        WHERE c.type = #{type}
+        <if test="categoryId != 0">AND c.category_id = #{categoryId}</if>
+        ORDER BY c.create_time DESC LIMIT 0,4
+    </select>
+
+    <select id="selectContentByType" resultType="org.example.finaltask.pojo.vo.ContentIndexVO">
+        SELECT c.id,
+               c.title,
+               c.img_url,
+               u.nick_name,
+               u.img_url userImgUrl,
+               cat.name  categoryName
+        FROM content c
+                 JOIN user u ON c.create_by = u.id
+                 JOIN category cat ON c.category_id = cat.id
+        WHERE c.type = #{type}
+        ORDER BY c.create_time DESC
+    </select>
+
+    <select id="selectContentDetailById" resultType="org.example.finaltask.pojo.vo.ContentDetailVO">
+        SELECT c.id,
+               c.title,
+               c.video_url,
+               c.content,
+               c.type,
+               c.view_count,
+               c.comment_count,
+               c.create_time,
+               u.id      userId,
+               u.nick_name,
+               u.img_url userImgUrl
+        FROM content c
+                 JOIN user u ON c.create_by = u.id
+        WHERE c.id = #{id}
+    </select>
+
+    <update id="updateViewCountById">
+        UPDATE content
+        SET view_count = view_count + 1
+        WHERE id = #{id}
+    </update>
+
+    <select id="selectContentOtherInfoByUserId" resultType="org.example.finaltask.pojo.vo.ContentSimpleVO">
+        SELECT id,
+               title,
+               img_url,
+               create_time
+        FROM content
+        WHERE create_by = #{userId}
+          AND id != #{contentId}
+        ORDER BY create_time DESC
+            LIMIT 0,4
+    </select>
+
+    <select id="selectContentHot" resultType="org.example.finaltask.pojo.vo.ContentSimpleVO">
+        SELECT id,
+               title,
+               img_url,
+               create_time
+        FROM content
+        ORDER BY view_count DESC
+            LIMIT 0,4
+    </select>
+
+    <select id="selectContentByWd" resultType="org.example.finaltask.pojo.vo.ContentIndexVO">
+        SELECT c.id,
+               c.title,
+               c.img_url,
+               u.nick_name,
+               u.img_url userImgUrl,
+               cat.name  categoryName
+        FROM content c
+                 JOIN user u ON c.create_by = u.id
+                 JOIN category cat ON c.category_id = cat.id
+        WHERE c.title LIKE CONCAT('%', #{wd}, '%')
+        ORDER BY c.create_time DESC
+    </select>
+
+    <update id="updateCommentCountById">
+        UPDATE content
+        SET comment_count = comment_count+1
+        WHERE id = #{contentId}
+    </update>
+</mapper>

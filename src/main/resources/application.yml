@@ -1,11 +1,11 @@
 Spring:
   datasource:
-    url:
-    username:
-    password:
+    url: jdbc:mysql://localhost:3307/travel?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: avengers123
   web:
     resources:
-      static-locations: classpath:/static/
+      static-locations: classpath:/static/,file:D:/Desktop/Idea project/FinalTask/file/
   servlet:
     multipart:
       max-file-size: 100MB
@@ -15,3 +15,7 @@ server:
     session:
       timeout: 120m
 
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mappers/*.xml
