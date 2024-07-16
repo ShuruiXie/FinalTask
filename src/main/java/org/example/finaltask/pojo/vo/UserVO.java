@@ -1,11 +1,16 @@
 package org.example.finaltask.pojo.vo;
 
+import java.util.Date;
+
 public class UserVO {
     private Long id;
     private String username;
     private String password;
     private String nickname;
     private String imgUrl;
+    private String email;
+    private Date createTime;
+    private int contentNum;
 
     public UserVO(Long id, String username, String password, String nickname) {
         this.id = id;
@@ -54,6 +59,30 @@ public class UserVO {
         this.imgUrl = imgUrl;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public int getContentNum() {
+        return contentNum;
+    }
+
+    public void setContentNum(int contentNum) {
+        this.contentNum = contentNum;
+    }
+
     @Override
     public String toString() {
         return "UserVO{" +
@@ -62,6 +91,9 @@ public class UserVO {
                 ", password='" + password + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", imgUrl='" + imgUrl + '\'' +
+                ", email='" + email + '\'' +
+                ", createTime=" + createTime +
+                ", contentNum=" + contentNum +
                 '}';
     }
 }

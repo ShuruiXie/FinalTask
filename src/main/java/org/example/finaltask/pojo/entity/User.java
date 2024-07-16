@@ -1,5 +1,7 @@
 package org.example.finaltask.pojo.entity;
 
+import java.util.Date;
+
 public class User {
 
     private Long id;
@@ -7,6 +9,10 @@ public class User {
     private String password;
     private String nickname;
     private String imgUrl;
+    private String email;
+    private Date createTime;
+    private int contentNum;
+
 
     public Long getId() {
         return id;
@@ -46,5 +52,29 @@ public class User {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public int getContentNum() {
+        return contentNum;
+    }
+
+    public void setContentNum(int contentNum) {
+        this.contentNum = contentNum;
     }
 }

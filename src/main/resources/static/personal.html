@@ -1,10 +1,225 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+
 <head>
     <meta charset="UTF-8">
     <title>Your Account</title>
-</head>
-<body>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.15.9/theme-chalk/index.css">
 
+    <style>
+        .header {
+            background-color: #409EFF;
+            line-height: 60px;
+        }
+
+        .main {
+            width: 800px;
+            margin: 0 auto;
+        }
+
+        .rounded-input {
+            border-radius: 15px !important;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-title {
+            font-size: 18px;
+            color: #606266;
+        }
+
+        .stat-value {
+            font-size: 20px;
+            font-weight: bold;
+            color: #303133;
+        }
+
+        .profile-section {
+            text-align: left;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .info-item {
+            font-size: 16px;
+            margin: 10px 0;
+            line-height: 2;
+            /* 行高设置 */
+        }
+        .rounded-dialog {
+            border-radius: 40px; /* 自定义圆角半径 */
+        }
+        .custom-dialog {
+            width: 500px; /* 设置对话框宽度 */
+            top: 20%; /* 设置对话框距离顶部的距离 */
+        }
+    </style>
+
+</head>
+
+<body>
+<div id="app">
+    <el-container>
+        <el-header class="header" style="background-color: #409EFF;line-height: 60px;">
+            <el-row>
+                <el-col :span="4">
+                    <el-button round
+                               style="margin: auto;font-family: 'Arial Black'; color: #a6bed7;font-size: 15px;">
+                        Return
+                    </el-button>
+                </el-col>
+                <el-col :span="16"
+                        style="text-align: center; color: aliceblue; font-family: 'Arial Black';font-size: 25px">
+                    Your Account
+                </el-col>
+            </el-row>
+        </el-header>
+        <el-main class="main"
+                 style="margin-top: 30px; border-radius: 80px; box-shadow: 20px 20px 20px 20px rgba(0, 0, 0, 0.05);height: 500px;">
+            <div style="margin-left: 20px">
+                <el-row>
+                    <el-col :span="4" style="margin-left: 35px;justify-content: center;margin-top: 20px;">
+                        <el-avatar :src="user.imgUrl" :size="200" style="margin-top: 15px;"></el-avatar>
+                    </el-col>
+                    <el-col :span="16">
+                        <el-row style="margin-left: 120px; margin-top: 10px">
+                            <h1 style="font-size: 50px;margin-top: 10px;height: 50px">{{user.nickname}}</h1>
+                        </el-row>
+                        <el-row
+                                style="margin-left: 80px;display: flex;justify-content: space-around;width: 100%;margin-top: 30px;">
+                            <el-col :span="8" class="stat-item">
+                                <div class="stat-title">Contributions</div>
+                                <div class="stat-value">{{ user.contentNum }}</div>
+                            </el-col>
+                            <el-col :span="8" class="stat-item">
+                                <div class="stat-title">Followers</div>
+                                <div class="stat-value">{{ user.viewCount }}</div>
+                            </el-col>
+                            <el-col :span="8" class="stat-item">
+                                <div class="stat-title">Following</div>
+                                <div class="stat-value">{{ user.CommentCount }}</div>
+                            </el-col>
+                        </el-row>
+                    </el-col>
+                </el-row>
+                <el-row style="margin-left: 80px;margin-top: 30px">
+                    <el-col :span="16">
+                    <div class="profile-section">
+                        <div class="info-item">
+                            <strong>Username: </strong>{{ user.username }}
+                        </div>
+                        <div class="info-item">
+                            <strong>Email: </strong>{{ user.email }}
+                        </div>
+                        <div class="info-item">
+                            <strong>Joined: </strong>{{ user.joinedDate}}
+                        </div>
+                    </div>
+                    </el-col>
+                    <el-col :span="4" style="margin-top: 100px;">
+                        <el-button type="primary" round @click="dialogVisible = true">Edit Profile</el-button>
+                    </el-col>
+
+                    <el-dialog :visible.sync="dialogVisible" custom-class="rounded-dialog custom-dialog">
+                        <el-form ref="form" :model="user" label-width="80px">
+                            <el-form-item label="nickname">
+                                <el-input v-model="user.nickname"></el-input>
+                            </el-form-item>
+                            <el-form-item label="Email">
+                                <el-input v-model="user.email"></el-input>
+                            </el-form-item>
+                        </el-form>
+                    </el-dialog>
+
+                </el-row>
+
+
+            </div>
+        </el-main>
+
+        <el-footer class="footer" style=" height: 250px; margin-top: 40px;background-color: #e4e9ed;">
+            <div class="FooterDiv" style="color: darkgray;text-align:left;width: 1200px;margin:0 auto">
+                <el-row style="margin-left: 150px">
+                    <el-col span="16" style="margin-top: 20px; width: 170px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">User Service</p>
+                        <p style="font-size: small;margin-top: 0;margin-bottom: 10px">User Agreement</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Privacy Policy</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Rights Protection</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Online Service</p>
+                    </el-col>
+                    <el-col span="16" style="margin-top: 20px;width: 170px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">Follow Us</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Sina Weibo</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">WeChat</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Xiaohongshu</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">TikTok</p>
+                    </el-col>
+                    <el-col span="16" style="margin-top: 20px;width: 170px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">Help Center</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Common Problem</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Sitemap</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Feedback</p>
+                    </el-col>
+                    <el-col span="16" style="margin-top: 20px;width: 300px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top:0">Contact Number</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">North America：+1 400-000-0000
+                        </p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Europe：+44 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Asia Pacific：+86 400-000-0000
+                        </p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">India：+91 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">South America：+55 400-000-0000
+                        </p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Africa：+86 400-000-0000</p>
+                    </el-col>
+                    <el-col span="5" style="margin-top: 20px;width: 170px">
+                        <img src="imgs/imgForFooter.png" width="78.6px" height="78.3px"><br>
+                        <img src="imgs/imgForPay.png" width="78.6px" height="78.3px">
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <p style="text-align: center;font-size: smaller;color: darkgray;">Copyright © 2024 - future IKUN
+                        Travel All Rights Reserved</p>
+                </el-row>
+            </div>
+        </el-footer>
+    </el-container>
+</div>
+
+
+<script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
+
+<script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
+<!-- import Axios -->
+<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+<script>
+    let v = new Vue({
+        el: '#app',
+        data: {
+            user: {
+                contentNum: 0,
+                viewCount: 0,
+                CommentCount: 0,
+                username: 'Shurui X',
+                nickname: 'Surperman',
+                email: 'shurui@example.com',
+                joinedDate: 'Jul 2024',
+                imgUrl: "imgs/头像1.png",
+            },
+            dialogVisible: false,  // 将这里移到 data 的直接声明中
+        },
+    });
+
+
+
+
+</script>
 </body>
+
 </html>
