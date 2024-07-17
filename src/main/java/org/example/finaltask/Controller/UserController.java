@@ -116,7 +116,7 @@ public class UserController {
         // 使用BeanUtils工具类将UserUpdateDTO中的属性值复制到User对象中
         BeanUtils.copyProperties(userUpdateDTO, user);
         // 调用userMapper的updateUserById方法，更新数据库中的用户信息
-        userMapper.updateUserById(user);
+        userMapper.updateUserById(user.getId());
         // 返回一个表示操作成功的JsonResult对象
         return JsonResult.ok();
     }

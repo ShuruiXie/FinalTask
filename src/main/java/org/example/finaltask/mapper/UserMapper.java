@@ -14,8 +14,11 @@ public interface UserMapper {
     UserVO selectUserByUsername(String username);
 
     //根据id更改用户信息
-    int updateUserById(User user);
+    int updateUserById(Long id);
 
     //根据id查询用户头像
     String selectImgUrlById(Long id);
+
+    //根据id更改用户点赞数
+    int updateLikeCountById(Long id);
 }

@@ -18,6 +18,7 @@
                    con.type,
                    con.view_count,
                    con.comment_count,
+                   con.like_count,
                    con.create_time,
                    cat.name categoryName
             from content con
@@ -69,6 +70,9 @@
            SELECT c.id,
            c.title,
            c.img_url,
+           c.like_count,
+           c.comment_count,
+           c.view_count,
            u.nick_name,
            u.img_url userImgUrl,
            cat.name categoryName
@@ -104,6 +108,7 @@
                   c.type,
                   c.view_count,
                   c.comment_count,
+                  c.like_count,
                   c.create_time,
                   u.id userId,
                   u.nick_name,
@@ -165,4 +170,11 @@
             SET view_count = view_count + 1
             WHERE id = #{id}
        </update>
+
+<!--    更新点赞次数-->
+    <update id="updateLikeCountById">
+        UPDATE content
+        SET like_count = like_count + 1
+        WHERE id = #{id}
+    </update>
    </mapper>

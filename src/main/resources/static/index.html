@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>首页</title>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.15.9/theme-chalk/index.css">
+
+    <style>
+        .el-header {
+            background-color: #409EFF;
+            color: #333;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        .el-main {
+            background-color: #FFFFFF;
+            color: #333;
+            text-align: center;
+            line-height: 100px;
+            margin-right: 130px;
+            margin-left: 130px;
+        }
+
+        body>.el-container {
+            margin-bottom: 40px;
+        }
+
+        /*轮播图大小*/
+        .el-carousel__item img {
+            width: 1200px;
+            height: 600px;
+            border-radius: 30px;
+        }
+
+        /*标签页*/
+        .el-tabs__item {
+            color: #000000;
+            font-family: "Segoe UI";
+            /* 替换为你的字体 */
+            font-size: 18px;
+            /* 字体大小 */
+            font-weight: 1000;
+            /* 字体粗细 */
+        }
+
+        /*图片文字*/
+        .image-text {
+            position: relative;
+            display: inline-block;
+        }
+
+        .image-with-caption {
+            position: relative;
+            display: inline-block;
+            width: auto;
+            /* Set as needed */
+            height: auto;
+            /* Set as needed */
+        }
+
+        .caption {
+            position: absolute;
+            top: 180px;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            color: white;
+            padding: 10px;
+            font-family: "Segoe UI";
+            font-size: 22px;
+            font-weight: 1000;
+        }
+
+        /* 修改文本按钮的默认字体颜色 */
+        .el-button--text {
+            background-color: #409EFF;
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 10px 20px;
+            font-weight: 1000;
+            font-family: sans-serif;
+        }
+
+        /* 修改文本按钮在hover状态下的字体颜色 */
+        .el-button--text:hover {
+            background-color: #66b1ff;
+            color: white;
+            cursor: pointer;
+
+        }
+
+        .custom-dropdown {
+            background-color: #409EFF;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .custom-dropdown:hover {
+            background-color: #66b1ff;
+            cursor: pointer;
+        }
+
+        .el-dropdown-link {
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+            font-weight: 1000;
+            font-family: sans-serif;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            /* 确保图片在轮播图容器内占满宽度 */
+            height: 400px;
+            /* 设置图片高度 */
+            object-fit: cover;
+            /* 确保图片在容器内按比例填充 */
+        }
+
+        .button-container {
+            position: absolute;
+            bottom: 80px;
+            left: 80px;
+            display: flex;
+        }
+
+        .custom-button {
+            background-color: rgba(166, 190, 215, 0.7);
+            border: none;
+            padding: 30px 60px;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .custom-button:hover {
+            background-color: rgba(64, 158, 255, 0.8);
+        }
+
+
+        .el-dropdown-menu {
+            padding-top: 10px;
+            border-radius: 30px;
+            background-color: rgba(217, 225, 230, 0.95);
+            box-shadow: 0px 4px 8px;
+        }
+
+        .el-dropdown-menu__item {
+            padding: 10px 20px;
+            color: #7d9ded;
+            font-family: "Arial Black";
+            font-size: 15px;
+        }
+
+        .el-dropdown-menu__item:hover {
+            background-color: #f2f6fc;
+            color: #409EFF;
+            border-radius: 15px;
+            font-family: "Arial Black";
+            font-size: 20px;
+        }
+    </style>
+
+</head>
+
+<body>
+<div id="app">
+    <el-container>
+        <el-header>
+            <el-row>
+                <el-col :span="6"><img src="imgs/logo.png" height="60px" width="188px"></el-col>
+                <el-col :span="12">
+                    <el-col :span="3">
+                        <el-row style="margin-left: 150px">
+                            <el-dropdown>
+                                    <span class="el-dropdown-link custom-dropdown">
+                                        Guide
+                                    </span>
+                                <el-dropdown-menu slot="dropdown" :default-active="currentIndex" @select="handleSelect()">
+                                    <el-dropdown-item index="1">Shopping</el-dropdown-item>
+                                    <el-dropdown-item index="2">Food</el-dropdown-item>
+                                    <el-dropdown-item index="3">Transportation</el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-row style="margin-left: 200px">
+                            <el-button round type="text" @click="turnTo(4)">Sights</el-button>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-row style="margin-left: 250px">
+                            <el-button round type="text" @click="turnTo(5)">Video</el-button>
+                        </el-row>
+                    </el-col>
+                </el-col>
+                <el-col :span="3" style="margin-left: auto; margin-right: 20px;">
+                    <!-- 用户未登录 -->
+                    <div v-if="user==null">
+                        <a href="login.html">
+                            <el-button round style="margin: auto; font-family: 'Arial Black'; color: #a6bed7; font-size: 15px;">
+                                Sign in
+                            </el-button>
+                        </a>
+                    </div>
+                    <el-dropdown v-else>
+                        <div>
+                            <el-avatar :src="user.avatar" style="margin-left: 10px; margin-top: 10px;"></el-avatar>
+                        </div>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item @click="logout()">Logout</el-dropdown-item>
+                            <el-dropdown-item><a href="personal.html">My Profile</a></el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </el-col>
+            </el-row>
+        </el-header>
+        <el-main>
+            <el-row>
+                <el-col>
+                    <h1 style="font-size: 70px; margin-left: 10px; margin-top: 30px; margin-bottom: 30px; color: black;font-family: 'Arial Black'">
+                        WHERE TO GO?</h1>
+                </el-col>
+            </el-row>
+            <el-row style="margin-bottom: 30px">
+                <el-col :span="14" style="margin-left: 200px; color: black;">
+                    <input type="text" id="search" name="q" placeholder="Places to go,things to do,hotels..."
+                            @keyup.enter="search()" v-model="wd"
+                            style="border-radius: 45px;
+                            padding-left: 20px;padding-top: 10px;padding-bottom: 10px; padding-right: 60px;
+                            border: 1px solid #ccc;width: 740px;
+                            height: 38px;
+                            font-size: 18px;
+                            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08);
+                            transition: all 0.3s ease;outline: none;">
+                </el-col>
+                <el-col :span="2" style="margin-bottom: 30px; margin-right: 200px">
+                    <el-button  type="primary" round @click="search()"
+                               style="border-radius: 45px;height: 50px;width: 100px;border-bottom: 100px">
+                        Search
+                    </el-button>
+                </el-col>
+                </form>
+            </el-row>
+            <el-row>
+                <el-col>
+                    <el-carousel height="600px" width="1500px" class="carousel-container">
+                        <el-carousel-item v-for="(image, index) in images" :key="index">
+                            <img :src="image" :alt="'Carousel Image ' + (index + 1)">
+                            <div class="button-container">
+                                <button class="custom-button" @click="buttonClick(index)"
+                                        style="font-size: 30px; padding: 20px;font-family: 'Arial Black';color: aquamarine;">GO
+                                    AND EXPLORE</button>
+                            </div>
+                        </el-carousel-item>
+                    </el-carousel>
+                </el-col>
+            </el-row>
+
+        </el-main>
+        <el-footer class="footer" style=" height: 250px; margin-top: 40px;background-color: #e4e9ed;">
+            <div class="FooterDiv" style="color: darkgray;text-align:left;width: 1200px;margin:0 auto">
+                <el-row style="margin-left: 150px">
+                    <el-col span="16" style="margin-top: 20px; width: 170px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">User Service</p>
+                        <p style="font-size: small;margin-top: 0;margin-bottom: 10px">User Agreement</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Privacy Policy</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Rights Protection</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Online Service</p>
+                    </el-col>
+                    <el-col span="16" style="margin-top: 20px;width: 170px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">Follow Us</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Sina Weibo</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">WeChat</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Xiaohongshu</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">TikTok</p>
+                    </el-col>
+                    <el-col span="16" style="margin-top: 20px;width: 170px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">Help Center</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Common Problem</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Sitemap</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Feedback</p>
+                    </el-col>
+                    <el-col span="16" style="margin-top: 20px;width: 300px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top:0">Contact Number</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">North America：+1 400-000-0000
+                        </p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Europe：+44 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Asia Pacific：+86 400-000-0000
+                        </p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">India：+91 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">South America：+55 400-000-0000
+                        </p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Africa：+86 400-000-0000</p>
+                    </el-col>
+                    <el-col span="5" style="margin-top: 20px;width: 170px">
+                        <img src="imgs/imgForFooter.png" width="78.6px" height="78.3px"><br>
+                        <img src="imgs/imgForPay.png" width="78.6px" height="78.3px">
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <p style="text-align: center;font-size: smaller;color: darkgray;">Copyright © 2024 - future IKUN
+                        Travel All Rights Reserved</p>
+                </el-row>
+            </div>
+        </el-footer>
+    </el-container>
+
+
+</div>
+
+<script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
+<script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                images: [
+                    'imgs/shanghai0.png',
+                    'imgs/beijing0.png',
+                    'imgs/newyork0.png',
+                    'imgs/paris0.png'
+                ],
+
+                wd: "",
+                currentIndex:"",
+                user:null,
+                user: localStorage.user ? JSON.parse(localStorage.user) : null,
+            };
+        },
+        methods: {
+            search() {
+                if (this.wd.trim() == "") {
+                    this.$message.error("Please Input Something!");
+                } else {
+                    location.href = "/contentList.html?wd=" + this.wd;
+                }
+            },
+
+            logout() {
+                if (confirm("您确定退出登录吗?")) {
+                    axios.get("/v1/users/logout").then(() => {
+                        localStorage.clear();
+                        location.href = "/";
+                    }).catch((error) => {
+                        console.error("Logout failed:", error);
+                    });
+                }
+            },
+            handleSelect(key, keyPath) {
+                location.href = "/contentList.html?type=" + key;
+            },
+
+            turnTo(key) {
+                location.href = "/contentList.html?type=" + key;
+            },
+
+            buttonClick(key) {
+                if (key == "1") {
+                    this.wd = "Shanghai";
+                    location.href = "/contentList.html?wd=" + this.wd;
+                } else if (key == "2") {
+                    this.wd = "Beijing";
+                    location.href = "/contentList.html?wd=" + this.wd;
+                } else if (key == "3") {
+                    this.wd = "NewYork";
+                    location.href = "/contentList.html?wd=" + this.wd;
+                } else if (key == "4") {
+                    this.wd = "Paris";
+                    location.href = "/contentList.html?wd=" + this.wd;
+                }
+
+            },
+
+        },
+    });
+</script>
+</body>
+
+
+
+</html>

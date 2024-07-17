@@ -12,6 +12,8 @@ public class User {
     private String email;
     private Date createTime;
     private int contentNum;
+    private int likeNum;
+    private int commentNum;
 
 
     public Long getId() {
@@ -76,5 +78,21 @@ public class User {
 
     public void setContentNum(int contentNum) {
         this.contentNum = contentNum;
+    }
+
+    public int getLikeNum() {
+        return likeNum;
+    }
+
+    public void setLikeNum(int likeNum) {
+        this.likeNum = likeNum;
+    }
+
+    public int getCommentNum() {
+        return commentNum;
+    }
+
+    public void setCommentNum(int commentNum) {
+        this.commentNum = commentNum;
     }
 }

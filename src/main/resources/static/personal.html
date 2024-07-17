@@ -57,7 +57,43 @@
         }
         .custom-dialog {
             width: 500px; /* 设置对话框宽度 */
-            top: 20%; /* 设置对话框距离顶部的距离 */
+            top: 4%; /* 设置对话框距离顶部的距离 */
+        }
+
+        .avatar-uploader {
+            position: relative;
+            width: 89px;
+            height: 89px;
+            border: 1px dashed #d9d9d9;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            overflow: hidden;
+        }
+
+        .avatar-uploader .avatar {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* This makes the image fit within the container */
+        }
+
+        .avatar-uploader-icon {
+            font-size: 28px;
+            color: #8c939d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+        }
+
+
+
+        .el-input__inner {
+            border-radius: 15px !important; /* 强制覆盖默认样式 */
+            border: 1px solid #ccc !important; /* 强制覆盖默认边框 */
         }
     </style>
 
@@ -85,11 +121,11 @@
             <div style="margin-left: 20px">
                 <el-row>
                     <el-col :span="4" style="margin-left: 35px;justify-content: center;margin-top: 20px;">
-                        <el-avatar :src="user.imgUrl" :size="200" style="margin-top: 15px;"></el-avatar>
+                        <el-avatar :src="user.imgUrl" :size="200" icon="el-icon-user" style="margin-top: 15px;"></el-avatar>
                     </el-col>
                     <el-col :span="16">
-                        <el-row style="margin-left: 120px; margin-top: 10px">
-                            <h1 style="font-size: 50px;margin-top: 10px;height: 50px">{{user.nickname}}</h1>
+                        <el-row style="margin-left: 120px;">
+                            <h1 style="font-size: 50px;margin-top: 55px;height: 50px">{{user.nickname}}</h1>
                         </el-row>
                         <el-row
                                 style="margin-left: 80px;display: flex;justify-content: space-around;width: 100%;margin-top: 30px;">
@@ -99,11 +135,11 @@
                             </el-col>
                             <el-col :span="8" class="stat-item">
                                 <div class="stat-title">Followers</div>
-                                <div class="stat-value">{{ user.viewCount }}</div>
+                                <div class="stat-value">{{ user.Followers }}</div>
                             </el-col>
                             <el-col :span="8" class="stat-item">
-                                <div class="stat-title">Following</div>
-                                <div class="stat-value">{{ user.CommentCount }}</div>
+                                <div class="stat-title">Likes</div>
+                                <div class="stat-value">{{ user.Likes }}</div>
                             </el-col>
                         </el-row>
                     </el-col>
@@ -128,18 +164,25 @@
 
                     <el-dialog :visible.sync="dialogVisible" custom-class="rounded-dialog custom-dialog">
                         <el-form ref="form" :model="user" label-width="80px">
-                            <el-form-item label="nickname">
+                            <el-form-item label="Avatar">
+                                <el-upload class="avatar-uploader" action="v1/upload" limit="1" list-type="picture-card" :show-file-list="false" :on-success="handleSuccess" :on-remove="handleRemove">
+                                <img v-if="user.imgUrl" :src="user.imgUrl" class="avatar"  >
+                                <i v-else class="el-icon-plus avatar-uploader-icon" ></i>
+                                </el-upload>
+                            </el-form-item>
+
+                            <el-form-item label="Nickname">
                                 <el-input v-model="user.nickname"></el-input>
                             </el-form-item>
                             <el-form-item label="Email">
                                 <el-input v-model="user.email"></el-input>
                             </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="save()" style="border-radius: 50px">Save</el-button>
+                            </el-form-item>
                         </el-form>
                     </el-dialog>
-
                 </el-row>
-
-
             </div>
         </el-main>
 
@@ -192,28 +235,50 @@
     </el-container>
 </div>
 
-
 <script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
-
 <script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
-<!-- import Axios -->
 <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+
 <script>
     let v = new Vue({
         el: '#app',
-        data: {
-            user: {
-                contentNum: 0,
-                viewCount: 0,
-                CommentCount: 0,
-                username: 'Shurui X',
-                nickname: 'Surperman',
-                email: 'shurui@example.com',
-                joinedDate: 'Jul 2024',
-                imgUrl: "imgs/头像1.png",
-            },
-            dialogVisible: false,  // 将这里移到 data 的直接声明中
+        data: function(){
+            return{
+                dialogVisible: false,
+                user:localStorage.user ? JSON.parse(localStorage.user):" ",
+                imgUrl:""
+            }
+
         },
+        methods: {
+            save(){
+                let u={id:this.user.id,nickname:this.user.nickname,email: this.user.email}
+                if(v.imgUrl!=""){
+                    this.imgUrl=this.imgUrl;
+                    this.user.imgUrl=this.imgUrl;
+                }
+                axios.post("v1/users/update",u).then(function (response) {
+                    if (response.data.code == 1) {
+                        localStorage.user = JSON.stringify(v.user);
+                        this.dialogVisible = false;
+                        location.reload();
+                    }
+                })
+            },
+            handleSuccess(response, file, fileList) {
+                this.imgUrl=response.data
+            },
+            handleRemove(file, fileList) {
+                this.imgUrl="";
+                console.log(file, fileList);
+                axios.post("v1/remove?url="+file.response.data).then(function (response){
+                    if(response.data.code==1){
+                        this.$message.success("Server file deleted successfully")
+                    }
+                })
+            }
+        }
+
     });
 
 

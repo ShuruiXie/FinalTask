@@ -4,6 +4,7 @@ public class UserUpdateDTO {
     private Long id;
     private String nickname;
     private String imgUrl;
+    private String email;
 
     public Long getId() {
         return id;
@@ -27,5 +28,13 @@ public class UserUpdateDTO {
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
