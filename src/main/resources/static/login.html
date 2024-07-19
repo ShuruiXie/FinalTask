@@ -58,13 +58,13 @@
                             <h1 style="font-size: 30px ;margin-bottom: 10px">Sign in to unlock <br>the best experience!</h1>
                         </el-form-item>
                         <el-form-item>
-                            <el-input type="username" v-model="username" placeholder="USERNAME" style="width: 300px"></el-input>
+                            <el-input type="username" v-model="user.username" placeholder="USERNAME" style="width: 300px"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-input type="password" v-model="password" placeholder="PASSWORD" style="width: 300px"></el-input>
+                            <el-input type="password" @keydown.native.enter="login()" v-model="user.password" placeholder="PASSWORD" style="width: 300px"></el-input>
                         </el-form-item>
                         <el-form-item>
-                            <el-button type="primary" style="width: 300px;height: 40px;background-color: #409EFF;border-radius: 15px;font-size: 15px;">
+                            <el-button type="primary" @click="login()" style=" width:300px;height: 40px;background-color: #409EFF;border-radius: 15px;font-size: 15px;">
                                 Sign in
                             </el-button>
                         </el-form-item>
@@ -125,8 +125,10 @@
         el: '#app',
         data: function () {
             return{
-                username: "",
-                password: ""
+                user: {
+                    username: "",
+                    password: ""
+                },
             }
         },
         methods: {
@@ -136,7 +138,7 @@
                         localStorage.user = JSON.stringify(response.data.data);
                         location.href="/";
                     }else{
-                        v.$message.error(response.data.msg);
+                        v.$message.error(response.data.message);
                     }
                 })
             }

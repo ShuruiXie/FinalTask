@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Post Article</title>
+    <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.15.9/theme-chalk/index.css">
+    <link href="https://cdn.staticfile.org/wangeditor5/5.1.23/css/style.min.css" rel="stylesheet">
+
+    <style>
+        .el-header {
+            background-color: #409EFF;
+            color: #333;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        .center {
+            width: 1200px;
+            margin: 0 auto
+        }
+
+
+        .el-button--text {
+            background-color: #409EFF;
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 10px 20px;
+            font-weight: 1000;
+            font-family: sans-serif;
+        }
+
+        /* 修改文本按钮在hover状态下的字体颜色 */
+        .el-button--text:hover {
+            background-color: #66b1ff;
+            color: white;
+            cursor: pointer;
+
+        }
+
+        .custom-dropdown {
+            background-color: #409EFF;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .custom-dropdown:hover {
+            background-color: #66b1ff;
+            cursor: pointer;
+        }
+
+        .el-dropdown-link {
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+            font-weight: 1000;
+            font-family: sans-serif;
+        }
+        .el-dropdown-menu {
+            padding-top: 10px;
+            border-radius: 30px;
+            background-color: rgba(217, 225, 230, 0.95);
+            box-shadow: 0px 4px 8px;
+        }
+
+        .el-dropdown-menu__item {
+            padding: 10px 20px;
+            color: #7d9ded;
+            font-family: "Arial Black";
+            font-size: 15px;
+        }
+
+        .el-dropdown-menu__item:hover {
+            background-color: #f2f6fc;
+            color: #409EFF;
+            border-radius: 15px;
+            font-family: "Arial Black";
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+
+<body>
+<div id="app">
+    <el-container>
+        <el-header>
+            <el-row>
+                <el-col :span="6"><a href="/"><el-button round style="margin: auto;font-family: 'Arial Black'; color: #a6bed7;font-size: 15px;">Return</el-button></a></el-col>
+                <el-col :span="12">
+                    <el-col :span="3">
+                        <el-row style="margin-left: 150px">
+                            <el-dropdown>
+                                    <span class="el-dropdown-link custom-dropdown">
+                                        Guide
+                                    </span>
+                                <el-dropdown-menu slot="dropdown" :default-active="currentIndex">
+                                    <el-dropdown-item><el-button @click="turnTo(2)">Shopping</el-button></el-dropdown-item>
+                                    <el-dropdown-item><el-button @click="turnTo(3)">Food</el-button></el-dropdown-item>
+                                    <el-dropdown-item><el-button @click="turnTo(4)">Transportation</el-button></el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-row style="margin-left: 200px">
+                            <el-button round type="text" @click="turnTo(5)">Sights</el-button>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-row style="margin-left: 250px">
+                            <el-button round type="text" @click="turnTo(6)">Video</el-button>
+                        </el-row>
+                    </el-col>
+                </el-col>
+                <el-col :span="3" style="margin-left: auto; margin-right: 20px;">
+                    <!-- 用户未登录 -->
+                    <div v-if="user==null">
+                        <a href="login.html">
+                            <el-button round style="margin: auto; font-family: 'Arial Black'; color: #a6bed7; font-size: 15px;">
+                                Sign in
+                            </el-button>
+                        </a>
+                    </div>
+                    <el-dropdown v-else>
+                        <div>
+                            <el-avatar :src="user.imgUrl" style="margin-left: 10px; margin-top: 10px;"></el-avatar>
+                        </div>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item ><el-button @click="logout()">Logout</el-button></el-dropdown-item>
+                            <el-dropdown-item><a style="text-decoration: none;" href="personal.html">My Profile</a></el-dropdown-item>
+                            <el-dropdown-item><a style="text-decoration: none;" href="postArticle.html">Upload Yours</a></el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </el-col>
+            </el-row>
+        </el-header>
+        <el-main class="center" style="margin-top: 30px;">
+             <el-row>
+                 <el-col>
+                     <el-card>
+                         <h1>
+                             {{c.id==null?'Post Article':'Edit Article'}}
+                         </h1>
+                         <el-form label-width="80px">
+                             <el-form-item label="Title">
+                                 <el-input v-model="c.title" placeholder="Please enter the article title"></el-input>
+                             </el-form-item>
+                             <el-form-item label="Type">
+                                     <el-radio-group :disabled="c.id!=null"  v-model="c.type">
+                                         <el-radio-button label="1">Guide</el-radio-button>
+                                         <el-radio-button label="5">Sights</el-radio-button>
+                                         <el-radio-button label="6">Video</el-radio-button>
+                                     </el-radio-group>
+                             </el-form-item>
+
+                             <el-form-item v-if="c.type==1" label="Class">
+                                 <el-select v-model="c.type" placeholder="Please select the class">
+                                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                                     </el-option>
+                                 </el-select>
+                             </el-form-item>
+
+                             <el-form-item label="Cover">
+                                 <img v-if="oldImgUrl!=''" :src="oldImgUrl" style="width: 145px;height: 145px">
+                                 <el-upload
+                                 action="/v1/upload"
+                                 name="file"
+                                 limit="1"
+                                 list-type="picture-card"
+                                 :on-success="handleSuccess"
+                                 :on-remove="handleRemove"
+                                 :on-preview="handlePictureCardPreview">
+                                     <i class="el-icon-plus"></i>
+                                 </el-upload>
+                                 <el-dialog :visible="dialogVisible"><img width="100%" :src="dialogImageUrl" alt="">
+                                 </el-dialog>
+                             </el-form-item>
+
+                             <el-form-item v-show="c.type==6" label="Video">
+                                 <el-upload
+                                 action="/v1/upload"
+                                 name="file"
+                                 limit="1"
+                                 accept="video/*"
+                                 :on-success="handleSuccess"
+                                 :on-remove="handleRemove"
+                                 :on-preview="handlePictureCardPreview">
+                                     <el-button type="primary" round>Upload Video</el-button>
+                                 </el-upload>
+                                 <div>Only mp4 And the size is less than 100Mb</div>
+                             </el-form-item>
+
+                             <el-form-item v-show="c.type!=6" label="Content">
+                                 <div style="border: 1px solid #ccc">
+                                     <div id="toolbar-container" style="border-bottom: 1px solid #ccc;"></div>
+                                     <div id="editor-container" style="height: 300px;"></div>
+                                 </div>
+                             </el-form-item>
+
+                             <el-form-item>
+                                  <el-button type="primary" round @click="post()">{{c.id==null?'Submit':'Edit'}}</el-button>
+                             </el-form-item>
+
+
+                         </el-form>
+                     </el-card>
+                 </el-col>
+             </el-row>
+        </el-main>
+        <el-footer class="footer" style=" height: 250px; margin-top: 40px;background-color: #e4e9ed;">
+            <div class="FooterDiv" style="color: darkgray;text-align:left;width: 1200px;margin:0 auto">
+                <el-row style="margin-left: 150px">
+                    <el-col span="16" style="margin-top: 20px; width: 170px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">User Service</p>
+                        <p style="font-size: small;margin-top: 0;margin-bottom: 10px">User Agreement</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Privacy Policy</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Rights Protection</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Online Service</p>
+                    </el-col>
+                    <el-col span="16" style="margin-top: 20px;width: 170px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">Follow Us</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Sina Weibo</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">WeChat</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Xiaohongshu</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">TikTok</p>
+                    </el-col>
+                    <el-col span="16" style="margin-top: 20px;width: 170px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">Help Center</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Common Problem</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Sitemap</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Feedback</p>
+                    </el-col>
+                    <el-col span="16" style="margin-top: 20px;width: 300px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top:0">Contact Number</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">North America：+1 400-000-0000
+                        </p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Europe：+44 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Asia Pacific：+86 400-000-0000
+                        </p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">India：+91 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">South America：+55 400-000-0000
+                        </p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Africa：+86 400-000-0000</p>
+                    </el-col>
+                    <el-col span="5" style="margin-top: 20px;width: 170px">
+                        <img src="imgs/imgForFooter.png" width="78.6px" height="78.3px"><br>
+                        <img src="imgs/imgForPay.png" width="78.6px" height="78.3px">
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <p style="text-align: center;font-size: smaller;color: darkgray;">Copyright © 2024 - future IKUN
+                        Travel All Rights Reserved</p>
+                </el-row>
+            </div>
+        </el-footer>
+    </el-container>
+</div>
+
+<script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
+<script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
+<script src="https://cdn.staticfile.org/wangeditor5/5.1.23/index.min.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+
+<script>
+    new Vue({
+        el: '#app',
+        data: function () {
+            return {
+                c: {
+                    title: "", imgUrl: "", content: "", videoUrl: "", createBy:"", type:"1",
+                },
+                user: localStorage.user ? JSON.parse(localStorage.user) : null,
+                currentIndex: "",
+                oldImgUrl: "",
+                options: [{
+                    value: '2',
+                    label: 'Shopping'
+                }, {
+                    value: '3',
+                    label: 'Food'
+                }, {
+                    value: '4',
+                    label: 'Transportation'
+                }],
+                value: '',
+                dialogVisible: false,
+                dialogImageUrl: ''
+            };
+        },
+        methods: {
+            logout() {
+                console.log("logout");
+                if (confirm("您确定退出登录吗?")) {
+                    axios.get("/v1/users/logout").then(() => {
+                        localStorage.clear();
+                        location.href = "/";
+                    });
+                }
+            },
+            turnTo(key) {
+                location.href = "/contentList.html?type=" + key;
+            },
+            post() {
+                if(this.c.type == 6 && this.c.videoUrl == ""){
+                    this.$message.error("视频地址不能为空");
+                    return;
+                }
+                if(this.c.imgUrl == ""){
+                    this.$message.error("封面不能为空");
+                    return;
+                }
+                let user = localStorage.user ? JSON.parse(localStorage.user) : null;
+                if(user.id != null){
+                    console.log(user.id);
+                    this.c.createBy = user.id;
+                }
+                axios.post("v1/contents/add-new", this.c).then(function (response) {
+                    if(response.data.code == 1){
+                        location.href = "articleManagement.html";
+                    }
+                });
+            },
+            handleSuccess(response, file, fileList) {
+                console.log("file=" + file.raw.type);
+                if(file.raw.type.includes("image")){
+                    this.c.imgUrl = response.data;
+                } else {
+                    this.c.videoUrl = response.data;
+                }
+            },
+
+            handleSelect(key, keyPath) {
+                if(key == "1"){
+                    location.href = "personal.html";
+                } else {
+                    location.href = "articleManagement.html";
+                }
+            },
+            handleRemove(file, fileList) {
+                if(file.raw.type.includes("image")){
+                    this.c.imgUrl = "";
+                } else {
+                    this.c.videoUrl = "";
+                }
+                console.log(file, fileList);
+                axios.post("v1/remove?url=" + file.response.data).then(function (response){
+                    if(response.data.code == 1){
+                        console.log("删除成功");
+                    }
+                });
+            },
+            handlePictureCardPreview(file) {
+
+                this.dialogImageUrl = file.url;
+                this.dialogVisible = true;
+            }
+        },
+        created: function () {
+            // if(location.search.includes("type")){
+            //     this.c.type = new URLSearchParams(location.search).get("type");
+            // }
+            if(location.search.includes("id")){
+                let id = new URLSearchParams(location.search).get("id");
+                axios.get("v1/contents/" + id + "/update").then(function (response) {
+                    if(response.data.code == 1){
+                        this.c = response.data.data;
+                        editor.setHtml(this.c.content);
+                        this.oldImgUrl = this.c.imgUrl;
+                    }
+                }.bind(this)); // Ensure 'this' is bound correctly
+            }
+        },
+        mounted: function() {
+            /**********富文本编辑器相关js开始***********/
+            const {createEditor, createToolbar} = window.wangEditor;
+            const editorConfig = {
+                placeholder: '请填写文章内容...',
+                onChange: (editor) => {
+                    const html = editor.getHtml();
+                    console.log('editor content', html);
+                    this.c.content = html; // Use 'this' to refer to the Vue instance
+                }
+            };
+            const editor = createEditor({
+                selector: '#editor-container',
+                html: '<p><br></p>',
+                config: editorConfig,
+                mode: 'simple',
+            });
+            const toolbarConfig = {};
+            const toolbar = createToolbar({
+                editor,
+                selector: '#toolbar-container',
+                config: toolbarConfig,
+                mode: 'simple',
+            });
+            /**********富文本编辑器相关js结束***********/
+        }
+    });
+</script>
+
+
+</body>
+</html>

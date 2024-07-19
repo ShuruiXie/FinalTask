@@ -13,7 +13,7 @@ public class User {
     private Date createTime;
     private int contentNum;
     private int likeNum;
-    private int commentNum;
+    private int followNum;
 
 
     public Long getId() {
@@ -88,11 +88,27 @@ public class User {
         this.likeNum = likeNum;
     }
 
-    public int getCommentNum() {
-        return commentNum;
+    public int getFollowNum() {
+        return followNum;
     }
 
-    public void setCommentNum(int commentNum) {
-        this.commentNum = commentNum;
+    public void setFollowNum(int followNum) {
+        this.followNum = followNum;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", imgUrl='" + imgUrl + '\'' +
+                ", email='" + email + '\'' +
+                ", createTime=" + createTime +
+                ", contentNum=" + contentNum +
+                ", likeNum=" + likeNum +
+                ", followNum=" + followNum +
+                '}';
     }
 }

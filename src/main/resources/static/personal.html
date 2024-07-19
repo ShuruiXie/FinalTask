@@ -105,14 +105,16 @@
         <el-header class="header" style="background-color: #409EFF;line-height: 60px;">
             <el-row>
                 <el-col :span="4">
-                    <el-button round
+                    <a href="/">
+                        <el-button round
                                style="margin: auto;font-family: 'Arial Black'; color: #a6bed7;font-size: 15px;">
-                        Return
-                    </el-button>
+                                  Return
+                        </el-button>
+                    </a>
                 </el-col>
                 <el-col :span="16"
                         style="text-align: center; color: aliceblue; font-family: 'Arial Black';font-size: 25px">
-                    Your Account
+                    My Profile
                 </el-col>
             </el-row>
         </el-header>
@@ -130,16 +132,16 @@
                         <el-row
                                 style="margin-left: 80px;display: flex;justify-content: space-around;width: 100%;margin-top: 30px;">
                             <el-col :span="8" class="stat-item">
-                                <div class="stat-title">Contributions</div>
+                                <div class="stat-title"><a href="/articleManagement.html" style="text-decoration: none;">Contributions</a></div>
                                 <div class="stat-value">{{ user.contentNum }}</div>
                             </el-col>
                             <el-col :span="8" class="stat-item">
                                 <div class="stat-title">Followers</div>
-                                <div class="stat-value">{{ user.Followers }}</div>
+                                <div class="stat-value">{{ user.followNum }}</div>
                             </el-col>
                             <el-col :span="8" class="stat-item">
                                 <div class="stat-title">Likes</div>
-                                <div class="stat-value">{{ user.Likes }}</div>
+                                <div class="stat-value">{{ user.likeNum }}</div>
                             </el-col>
                         </el-row>
                     </el-col>
@@ -154,7 +156,7 @@
                             <strong>Email: </strong>{{ user.email }}
                         </div>
                         <div class="info-item">
-                            <strong>Joined: </strong>{{ user.joinedDate}}
+                            <strong>Joined: </strong>{{user.createTime}}
                         </div>
                     </div>
                     </el-col>
@@ -166,11 +168,10 @@
                         <el-form ref="form" :model="user" label-width="80px">
                             <el-form-item label="Avatar">
                                 <el-upload class="avatar-uploader" action="v1/upload" limit="1" list-type="picture-card" :show-file-list="false" :on-success="handleSuccess" :on-remove="handleRemove">
-                                <img v-if="user.imgUrl" :src="user.imgUrl" class="avatar"  >
+                                <img v-if="user.imgUrl" :src="user.imgUrl" class="avatar">
                                 <i v-else class="el-icon-plus avatar-uploader-icon" ></i>
                                 </el-upload>
                             </el-form-item>
-
                             <el-form-item label="Nickname">
                                 <el-input v-model="user.nickname"></el-input>
                             </el-form-item>
@@ -254,7 +255,7 @@
             save(){
                 let u={id:this.user.id,nickname:this.user.nickname,email: this.user.email}
                 if(v.imgUrl!=""){
-                    this.imgUrl=this.imgUrl;
+                    u.imgUrl=this.imgUrl;
                     this.user.imgUrl=this.imgUrl;
                 }
                 axios.post("v1/users/update",u).then(function (response) {
@@ -265,17 +266,22 @@
                     }
                 })
             },
-            handleSuccess(response, file, fileList) {
-                this.imgUrl=response.data
+            handleSuccess(response) {
+                if(response.code==1){
+                    this.user.imgUrl=response.data.url;
+                }else{
+                    this.$message.error("Upload failed")
+                }
+
             },
             handleRemove(file, fileList) {
                 this.imgUrl="";
-                console.log(file, fileList);
-                axios.post("v1/remove?url="+file.response.data).then(function (response){
-                    if(response.data.code==1){
-                        this.$message.success("Server file deleted successfully")
-                    }
-                })
+                // console.log(file, fileList);
+                // axios.post("v1/remove?url="+file.response.data).then(function (response){
+                //     if(response.data.code==1){
+                //         this.$message.success("Server file deleted successfully")
+                //     }
+                // })
             }
         }
 

@@ -6,8 +6,8 @@
 <mapper namespace="org.example.finaltask.mapper.UserMapper">
 <!--    插入用户，注册用-->
     <insert id="insertUser">
-        INSERT INTO user (user_name,password,nick_name)
-        VALUES (#{username},#{password},#{nickname})
+        INSERT INTO user (user_name,password,nick_name,create_time)
+        VALUES (#{username},#{password},#{nickname},#{createTime})
     </insert>
 
 <!--    通过用户名查询用户信息-->
@@ -18,25 +18,57 @@
     </select>
 <!--    根据id更新用户信息-->
     <update id="updateUserById">
-         UPDATE user
-         <set>
-             <if test="nickname != null and nickName != ''">nick_name=#{nickname},</if>
-             <if test="imgUrl != null and imgUrl != ''">img_url=#{imgUrl}</if>
-             <if test="email != null and email != ''">email=#{email}</if>
-         </set>
+        UPDATE user
+        <set>
+            <if test="nickname != null and nickname != ''">nick_name=#{nickname},</if>
+            <if test="email != null and email != ''">email=#{email},</if>
+            <if test="imgUrl != null and imgUrl != ''">img_url=#{imgUrl}</if>
+        </set>
+        WHERE id = #{id}
     </update>
 
-<!--    根据id查询用户头像-->
+
+
+    <!--    根据id查询用户头像-->
     <select id="selectImgUrlById" resultType="string">
         SELECT img_url
         FROM user
         WHERE id = #{id}
     </select>
 
-    <update id="updateLikeCountById">
+    <update id="addLikeCountById">
         UPDATE content
         SET like_count = like_count + 1
         WHERE id = #{id}
     </update>
 
+    <update id="addContentNumById">
+        UPDATE user
+        SET content_num = content_num + 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="addFollowCountById">
+        UPDATE user
+        SET follow_num = follow_num + 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="reduceLikeCountById">
+        UPDATE content
+        SET like_count = like_count - 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="reduceContentNumById">
+        UPDATE user
+        SET content_num = content_num - 1
+        WHERE id = #{id}
+    </update>
+
+    <update id="reduceFollowCountById">
+        UPDATE user
+        SET follow_num = follow_num - 1
+        WHERE id = #{id}
+    </update>
 </mapper>

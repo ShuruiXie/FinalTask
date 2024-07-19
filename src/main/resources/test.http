@@ -29,3 +29,12 @@ Content-Type: application/json
   "password": "123456"
 }
 
+###
+GET localhost:8080/v1/contents/Shanghai/search
+
+###
+GET localhost:8080/v1/contents/Beijing/search
+
+###
+GET localhost:8080/v1/contents/6/list
+

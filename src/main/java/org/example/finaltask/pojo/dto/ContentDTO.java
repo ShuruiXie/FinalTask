@@ -6,7 +6,6 @@ public class ContentDTO {
     private String content;
     private String imgUrl;
     private String videoUrl;
-    private Long categoryId;
     private Long type;
     private Long createBy;
 
@@ -50,13 +49,6 @@ public class ContentDTO {
         this.videoUrl = videoUrl;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
 
     public Long getType() {
         return type;

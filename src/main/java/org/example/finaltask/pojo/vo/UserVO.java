@@ -11,12 +11,15 @@ public class UserVO {
     private String email;
     private Date createTime;
     private int contentNum;
+    private int likeNum;
+    private int followNum;
 
     public UserVO(Long id, String username, String password, String nickname) {
         this.id = id;
         this.username = username;
         this.password = password;
         this.nickname = nickname;
+
     }
 
     public Long getId() {
@@ -81,6 +84,22 @@ public class UserVO {
 
     public void setContentNum(int contentNum) {
         this.contentNum = contentNum;
+    }
+
+    public int getLikeNum() {
+        return likeNum;
+    }
+
+    public void setLikeNum(int likeNum) {
+        this.likeNum = likeNum;
+    }
+
+    public int getFollowNum() {
+        return followNum;
+    }
+
+    public void setFollowNum(int followNum) {
+        this.followNum = followNum;
     }
 
     @Override

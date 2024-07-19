@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ArticleManagement</title>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.15.9/theme-chalk/index.css">
+
+    <style>
+        .el-header {
+            background-color: #409EFF;
+            color: #333;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        .el-main {
+            background-color: #FFFFFF;
+            color: #333;
+            text-align: center;
+            line-height: 100px;
+            margin-right: 130px;
+            margin-left: 130px;
+            height: auto;
+        }
+
+        /*下拉菜单*/
+        .el-dropdown-link {
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+            font-weight: 1000; /* 字体粗细 */
+            font-family: sans-serif;
+        }
+
+        /* 修改文本按钮的默认字体颜色 */
+        .el-button--text {
+            background-color: #409EFF;
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 10px 20px;
+            font-weight: 1000;
+            font-family: sans-serif;
+        }
+
+        /* 修改文本按钮在hover状态下的字体颜色 */
+        .el-button--text:hover {
+            background-color: #66b1ff;
+            color: white;
+            cursor: pointer;
+
+        }
+
+        .custom-dropdown {
+            background-color: #409EFF;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .custom-dropdown:hover {
+            background-color: #66b1ff;
+            cursor: pointer;
+        }
+
+        .el-dropdown-link {
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+            font-weight: 1000;
+            font-family: sans-serif;
+        }
+        .el-dropdown-menu {
+            padding-top: 10px;
+            border-radius: 30px;
+            background-color: rgba(217, 225, 230, 0.95);
+            box-shadow: 0px 4px 8px;
+        }
+
+        .el-dropdown-menu__item {
+            padding: 10px 20px;
+            color: #7d9ded;
+            font-family: "Arial Black";
+            font-size: 15px;
+        }
+
+        .el-dropdown-menu__item:hover {
+            background-color: #f2f6fc;
+            color: #409EFF;
+            border-radius: 15px;
+            font-family: "Arial Black";
+            font-size: 20px;
+        }
+
+    </style>
+
+</head>
+<body>
+<div id="app">
+    <el-container>
+        <el-header>
+            <el-row>
+                <el-col :span="6"><a href="/"><el-button round style="margin: auto;font-family: 'Arial Black'; color: #a6bed7;font-size: 15px;">Return</el-button></a></el-col>
+                <el-col :span="12">
+                    <el-col :span="3">
+                        <el-row style="margin-left: 150px">
+                            <el-dropdown>
+                                    <span class="el-dropdown-link custom-dropdown">
+                                        Guide
+                                    </span>
+                                <el-dropdown-menu slot="dropdown" :default-active="currentIndex">
+                                    <el-dropdown-item><el-botton @click="transferTo(2)">Shopping</el-botton></el-dropdown-item>
+                                    <el-dropdown-item><el-botton @click="transferTo(3)">Food</el-botton></el-dropdown-item>
+                                    <el-dropdown-item><el-botton @click="transferTo(4)">Transportation</el-botton></el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-row style="margin-left: 200px">
+                            <el-button round type="text" @click="turnTo(5)">Sights</el-button>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-row style="margin-left: 250px">
+                            <el-button round type="text" @click="turnTo(6)">Video</el-button>
+                        </el-row>
+                    </el-col>
+                </el-col>
+                <el-col :span="3" style="margin-left: auto; margin-right: 20px;">
+                    <!-- 用户未登录 -->
+                    <div v-if="user==null">
+                        <a href="login.html">
+                            <el-button round style="margin: auto; font-family: 'Arial Black'; color: #a6bed7; font-size: 15px;">
+                                Sign in
+                            </el-button>
+                        </a>
+                    </div>
+                    <el-dropdown v-else>
+                        <div>
+                            <el-avatar :src="user.imgUrl" style="margin-left: 10px; margin-top: 10px;"></el-avatar>
+                        </div>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item ><el-botton @click="logout()">Logout</el-botton></el-dropdown-item>
+                            <el-dropdown-item><a style="text-decoration: none;" href="personal.html">My Profile</a></el-dropdown-item>
+                            <el-dropdown-item><a style="text-decoration: none;" href="postArticle.html">Upload Yours</a></el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </el-col>
+            </el-row>
+        </el-header>
+        <el-main>
+            <el-row type="flex" justify="center">
+                <el-card shadow="always" style="width: 1000px;">
+                    <template>
+                        <el-table
+                                :data="tableData"
+                                border
+                                style="width: 100%;line-height: 30px;margin-top: 30px">
+                            <el-table-column
+                                    prop="title"
+                                    label="Title"
+                                    width="180">
+                            </el-table-column>
+                            <el-table-column
+                                    prop="cover"
+                                    label="Cover"
+                                    width="180">
+                                <template slot-scope="scope">
+                                    <img :src="scope.row.imgUrl" width="50px">
+                                </template>
+                            </el-table-column>
+                            <el-table-column label="浏览量"
+                                             prop="viewCount"
+                                             width="180">
+                            </el-table-column>
+                            <el-table-column label="创建时间"
+                                             prop="createTime"
+                                             width="180">
+                            </el-table-column>
+                            <el-table-column label="操作">
+                                <template slot-scope="scope">
+                                    <el-button
+                                            size="mini"
+                                            @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
+                                    <el-button
+                                            size="mini"
+                                            type="danger"
+                                            @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </template>
+                </el-card>
+            </el-row>
+        </el-main>
+        <el-footer class="footer" style=" height: 250px; margin-top: 40px;background-color: #e4e9ed;">
+            <div class="FooterDiv" style="color: darkgray;text-align:left;width: 1200px;margin:0 auto">
+                <el-row style="margin-left: 150px">
+                    <el-col span="16" style="margin-top: 20px; width: 170px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">User Service</p>
+                        <p style="font-size: small;margin-top: 0;margin-bottom: 10px">User Agreement</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Privacy Policy</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Rights Protection</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Online Service</p>
+                    </el-col>
+                    <el-col span="16" style="margin-top: 20px;width: 170px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">Follow Us</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Sina Weibo</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">WeChat</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Xiaohongshu</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">TikTok</p>
+                    </el-col>
+                    <el-col span="16" style="margin-top: 20px;width: 170px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">Help Center</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Common Problem</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Sitemap</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Feedback</p>
+                    </el-col>
+                    <el-col span="16" style="margin-top: 20px;width: 300px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top:0">Contact Number</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">North America：+1 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Europe：+44 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Asia Pacific：+86 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">India：+91 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">South America：+55 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Africa：+86 400-000-0000</p>
+                    </el-col>
+                    <el-col span="5" style="margin-top: 20px;width: 170px">
+                        <img src="imgs/imgForFooter.png" width="78.6px" height="78.3px"><br>
+                        <img src="imgs/imgForPay.png" width="78.6px" height="78.3px">
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <p style="text-align: center;font-size: smaller;color: darkgray;">Copyright © 2024 - future IKUN Travel All Rights Reserved</p>
+                </el-row>
+            </div>
+        </el-footer>
+    </el-container>
+</div>
+
+<script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
+<script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+
+<script>
+    let v = new Vue({
+        el: '#app',
+        data(){
+            return {
+                user: localStorage.user ? JSON.parse(localStorage.user) : null,
+                currentIndex: "",
+                tableData: [
+                ]
+            }
+        },
+        methods: {
+            logout() {
+                console.log("logout");
+                if (confirm("您确定退出登录吗?")) {
+                    axios.get("/v1/users/logout").then(() => {
+                        localStorage.clear();
+                        location.href = "/";
+                    });
+                }
+            },
+            transferTo(key) {
+                location.href = "/contentList.html?type=1&categoryId=" + key;
+            },
+            turnTo(key) {
+                location.href = "/contentList.html?type=" + key+"&categoryId="+key;
+            },
+            handleEdit(index, row) {
+                location.href = "/postArticle.html?type="+row.type+"&id="+row.id;
+            },
+            handleDelete(index, row) {
+                console.log(index, row);
+            }
+        },
+        created:function () {
+            axios.get("/v1/contents/management").then(function (response) {
+                if (response.data.code==1){
+                    v.tableData = response.data.data;
+                }
+            })
+        }
+    })
+</script>
+</body>
+
+
+
+</html>
