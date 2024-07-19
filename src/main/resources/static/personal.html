@@ -276,12 +276,12 @@
             },
             handleRemove(file, fileList) {
                 this.imgUrl="";
-                // console.log(file, fileList);
-                // axios.post("v1/remove?url="+file.response.data).then(function (response){
-                //     if(response.data.code==1){
-                //         this.$message.success("Server file deleted successfully")
-                //     }
-                // })
+                console.log(file, fileList);
+                axios.post("v1/remove?url="+file.response.data).then(function (response){
+                    if(response.data.code==1){
+                        this.$message.success("Server file deleted successfully")
+                    }
+                })
             }
         }
 

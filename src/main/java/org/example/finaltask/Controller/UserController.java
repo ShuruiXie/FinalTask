@@ -124,6 +124,19 @@ public class UserController {
         return JsonResult.ok();
     }
 
+    @PostMapping("{id}/add-follower")
+    public JsonResult addFollowCountById(@PathVariable Long id){
+        System.out.println("调用了关注方法");
+        userMapper.addFollowCountById(id);
+        return JsonResult.ok();
+    }
+
+    @PostMapping("{id}/reduce-follower")
+    public JsonResult reduceFollowCountById(@PathVariable Long id){
+        System.out.println("调用了取消关注方法");
+        userMapper.reduceFollowCountById(id);
+        return JsonResult.ok();
+    }
 }
 
 

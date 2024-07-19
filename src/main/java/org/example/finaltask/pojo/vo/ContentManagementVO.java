@@ -9,8 +9,9 @@ public class ContentManagementVO {
        private Long type;
        private int viewCount;
        private int commentCount;
+       private int likeCount;
        private Date createTime;
-       private String categoryName;
+
 
     public Long getId() {
         return id;
@@ -68,11 +69,12 @@ public class ContentManagementVO {
         this.createTime = createTime;
     }
 
-    public String getCategoryName() {
-        return categoryName;
+
+    public int getLikeCount() {
+        return likeCount;
     }
 
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
+    public void setLikeCount(int likeCount) {
+        this.likeCount = likeCount;
     }
 }

@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.example.finaltask.mapper.ContentMapper">
-<!--     插入内容-->
+    <!--     插入内容-->
     <insert id="insertContent">
          insert into content(title,img_url,video_url,content,type,view_count,comment_count,create_time,create_by,update_time,update_by)
           VALUES (#{title},#{imgUrl},#{videoUrl},#{content},#{type},#{viewCount},#{commentCount},#{createTime},#{createBy},#{updateTime},#{updateBy})
@@ -16,9 +16,8 @@
            WHERE id = #{id}
        </delete>
 
-
-<!--       根据分类查询该分类下的所有稿件-->
-       <select id="selectContentByType" resultType="org.example.finaltask.pojo.vo.ContentSimpleVO">
+    <!--       根据分类查询该分类下的所有稿件-->
+    <select id="selectContentByType" resultType="org.example.finaltask.pojo.vo.ContentSimpleVO">
            SELECT id,
                   title,
                   img_url
@@ -27,8 +26,8 @@
            ORDER BY create_time DESC
        </select>
 
-<!--       根据稿件的id查询稿件详细内容-->
-       <select id="selectContentDetailById" resultType="org.example.finaltask.pojo.vo.ContentDetailVO">
+    <!--       根据稿件的id查询稿件详细内容-->
+    <select id="selectContentDetailById" resultType="org.example.finaltask.pojo.vo.ContentDetailVO">
            SELECT c.id,
                   c.title,
                   c.video_url,
@@ -38,6 +37,7 @@
                   c.comment_count,
                   c.like_count,
                   c.create_time,
+                  c.create_by,
                   u.id userId,
                   u.nick_name,
                   u.img_url userImgUrl
@@ -46,8 +46,8 @@
            WHERE c.id = #{id}
        </select>
 
-<!--       根据作者id找他其他作品4个-->
-       <select id="selectContentOtherInfoByUserId" resultType="org.example.finaltask.pojo.vo.ContentSimpleVO">
+    <!--       根据作者id找他其他作品4个-->
+    <select id="selectContentOtherInfoByUserId" resultType="org.example.finaltask.pojo.vo.ContentSimpleVO">
            SELECT id,
                   title,
                   img_url,
@@ -109,6 +109,12 @@
         WHERE id = #{id}
     </update>
 
+    <update id="reduceLikeCountById">
+        UPDATE content
+        SET like_count = like_count - 1
+        WHERE id = #{id}
+    </update>
+
     <select id="selectContentUserId" resultType="org.example.finaltask.pojo.vo.ContentManagementVO">
           select id,title,img_url,type,create_time,comment_count,like_count,view_count
           from content
@@ -142,8 +148,5 @@
         </set>
         WHERE id = #{id}
     </update>
-
-
-
 
 </mapper>

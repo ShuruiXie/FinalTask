@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Post Article</title>
+    <!-- import CSS -->
     <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.15.9/theme-chalk/index.css">
+    <!--引入富文本编辑器相关css-->
     <link href="https://cdn.staticfile.org/wangeditor5/5.1.23/css/style.min.css" rel="stylesheet">
 
     <style>
@@ -98,9 +100,9 @@
                                         Guide
                                     </span>
                                 <el-dropdown-menu slot="dropdown" :default-active="currentIndex">
-                                    <el-dropdown-item><el-button @click="turnTo(2)">Shopping</el-button></el-dropdown-item>
-                                    <el-dropdown-item><el-button @click="turnTo(3)">Food</el-button></el-dropdown-item>
-                                    <el-dropdown-item><el-button @click="turnTo(4)">Transportation</el-button></el-dropdown-item>
+                                    <el-dropdown-item ><a @click="turnTo(2)">Shopping</a></el-dropdown-item>
+                                    <el-dropdown-item ><a @click="turnTo(3)">Food</a></el-dropdown-item>
+                                    <el-dropdown-item ><a @click="turnTo(4)">Transportation</a></el-dropdown-item>
                                 </el-dropdown-menu>
                             </el-dropdown>
                         </el-row>
@@ -130,7 +132,7 @@
                             <el-avatar :src="user.imgUrl" style="margin-left: 10px; margin-top: 10px;"></el-avatar>
                         </div>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item ><el-button @click="logout()">Logout</el-button></el-dropdown-item>
+                            <el-dropdown-item ><a @click="logout">Logout</a></el-dropdown-item>
                             <el-dropdown-item><a style="text-decoration: none;" href="personal.html">My Profile</a></el-dropdown-item>
                             <el-dropdown-item><a style="text-decoration: none;" href="postArticle.html">Upload Yours</a></el-dropdown-item>
                         </el-dropdown-menu>
@@ -143,7 +145,7 @@
                  <el-col>
                      <el-card>
                          <h1>
-                             {{c.id==null?'Post Article':'Edit Article'}}
+                             {{c.id==null?'Share Your Story':'Edit'}}
                          </h1>
                          <el-form label-width="80px">
                              <el-form-item label="Title">
@@ -157,12 +159,17 @@
                                      </el-radio-group>
                              </el-form-item>
 
-                             <el-form-item v-if="c.type==1" label="Class">
-                                 <el-select v-model="c.type" placeholder="Please select the class">
-                                     <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+                             <div v-if="c.type=='1'||c.type=='2'||c.type=='3'||c.type=='4'">
+                             <el-form-item  label="Class">
+                                 <el-select v-model="c.value" placeholder="Please select the class">
+                                     <el-option v-for="item in options"
+                                                :key="item.value"
+                                                :label="item.label"
+                                                :value="item.value">
                                      </el-option>
                                  </el-select>
                              </el-form-item>
+                             </div>
 
                              <el-form-item label="Cover">
                                  <img v-if="oldImgUrl!=''" :src="oldImgUrl" style="width: 145px;height: 145px">
@@ -260,18 +267,24 @@
     </el-container>
 </div>
 
+</body>
+
+<!-- import Vue before Element -->
 <script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
+<!-- import JavaScript -->
 <script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
+<!--引入富文本编辑器相关的js文件-->
 <script src="https://cdn.staticfile.org/wangeditor5/5.1.23/index.min.js"></script>
+<!--引入Axios-->
 <script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
 
 <script>
-    new Vue({
+    let v = new Vue({
         el: '#app',
         data: function () {
             return {
                 c: {
-                    title: "", imgUrl: "", content: "", videoUrl: "", createBy:"", type:"1",
+                    title: "", imgUrl: "", content: "", videoUrl: "", createBy:"", type:"",value:"",
                 },
                 user: localStorage.user ? JSON.parse(localStorage.user) : null,
                 currentIndex: "",
@@ -286,7 +299,6 @@
                     value: '4',
                     label: 'Transportation'
                 }],
-                value: '',
                 dialogVisible: false,
                 dialogImageUrl: ''
             };
@@ -294,7 +306,7 @@
         methods: {
             logout() {
                 console.log("logout");
-                if (confirm("您确定退出登录吗?")) {
+                if (confirm("Are you sure to log out?")) {
                     axios.get("/v1/users/logout").then(() => {
                         localStorage.clear();
                         location.href = "/";
@@ -305,12 +317,16 @@
                 location.href = "/contentList.html?type=" + key;
             },
             post() {
+                if(this.c.value != ""){
+                    this.c.type=this.c.value;
+                }
+
                 if(this.c.type == 6 && this.c.videoUrl == ""){
-                    this.$message.error("视频地址不能为空");
+                    this.$message.error("THE VIDEO ADDRESS CANNOT BE EMPTY");
                     return;
                 }
                 if(this.c.imgUrl == ""){
-                    this.$message.error("封面不能为空");
+                    this.$message.error("THE COVER PAGE CANNOT BE EMPTY");
                     return;
                 }
                 let user = localStorage.user ? JSON.parse(localStorage.user) : null;
@@ -360,6 +376,7 @@
             }
         },
         created: function () {
+
             // if(location.search.includes("type")){
             //     this.c.type = new URLSearchParams(location.search).get("type");
             // }
@@ -368,41 +385,40 @@
                 axios.get("v1/contents/" + id + "/update").then(function (response) {
                     if(response.data.code == 1){
                         this.c = response.data.data;
-                        editor.setHtml(this.c.content);
+                        editor.setHtml(v.c.content);
                         this.oldImgUrl = this.c.imgUrl;
                     }
-                }.bind(this)); // Ensure 'this' is bound correctly
+                }.bind(this));
             }
         },
-        mounted: function() {
-            /**********富文本编辑器相关js开始***********/
-            const {createEditor, createToolbar} = window.wangEditor;
-            const editorConfig = {
-                placeholder: '请填写文章内容...',
-                onChange: (editor) => {
-                    const html = editor.getHtml();
-                    console.log('editor content', html);
-                    this.c.content = html; // Use 'this' to refer to the Vue instance
-                }
-            };
-            const editor = createEditor({
-                selector: '#editor-container',
-                html: '<p><br></p>',
-                config: editorConfig,
-                mode: 'simple',
-            });
-            const toolbarConfig = {};
-            const toolbar = createToolbar({
-                editor,
-                selector: '#toolbar-container',
-                config: toolbarConfig,
-                mode: 'simple',
-            });
-            /**********富文本编辑器相关js结束***********/
-        }
+
+
     });
+
+    /**********富文本编辑器相关js开始***********/
+    const {createEditor, createToolbar} = window.wangEditor
+    const editorConfig = {
+        placeholder: 'Please enter content...',
+        onChange(editor) {
+            const html = editor.getHtml()
+            console.log('editor content', html)
+            //html代表用户输入的文章内容
+            v.c.content = html;
+        }
+    }
+    const editor = createEditor({
+        selector: '#editor-container',
+        html: '<p><br></p>',
+        config: editorConfig,
+        mode: 'simple',
+    })
+    const toolbarConfig = {}
+    const toolbar = createToolbar({
+        editor,
+        selector: '#toolbar-container',
+        config: toolbarConfig,
+        mode: 'simple',
+    })
+    /**********富文本编辑器相关js结束***********/
 </script>
-
-
-</body>
 </html>

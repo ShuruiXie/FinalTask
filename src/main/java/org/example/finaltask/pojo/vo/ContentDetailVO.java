@@ -5,6 +5,7 @@ import java.util.Date;
 public class ContentDetailVO {
     private Long id;
     private String title;
+    private String imgUrl;
     private String videoUrl;
     private String content;
     private Long type;
@@ -13,6 +14,8 @@ public class ContentDetailVO {
     private Date createTime;
     private String nickname;
     private String userImgUrl;
+    private Long likeCount;
+    private Long createBy;
 
     public Long getId() {
         return id;
@@ -92,5 +95,29 @@ public class ContentDetailVO {
 
     public void setUserImgUrl(String userImgUrl) {
         this.userImgUrl = userImgUrl;
+    }
+
+    public Long getLikeCount() {
+        return likeCount;
+    }
+
+    public void setLikeCount(Long likeCount) {
+        this.likeCount = likeCount;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
+    public Long getCreateBy() {
+        return createBy;
+    }
+
+    public void setCreateBy(Long createBy) {
+        this.createBy = createBy;
     }
 }

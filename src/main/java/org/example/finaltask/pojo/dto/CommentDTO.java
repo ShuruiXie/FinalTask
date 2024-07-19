@@ -5,7 +5,8 @@ package org.example.finaltask.pojo.dto;
 public class CommentDTO {
     private Long contentId;
     private String content;
-    private Long UserId;
+    private Long userId;
+    private String imgUrl;
 
     public Long getContentId() {
         return contentId;
@@ -23,11 +24,20 @@ public class CommentDTO {
         this.content = content;
     }
 
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
+
     public Long getUserId() {
-        return UserId;
+        return userId;
     }
 
     public void setUserId(Long userId) {
-        UserId = userId;
+        this.userId = userId;
     }
 }

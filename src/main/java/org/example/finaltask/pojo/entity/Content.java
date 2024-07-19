@@ -16,7 +16,7 @@ public class Content {
     private Date createTime;
     private Long updateBy;
     private Date updateTime;
-    private Long categoryId;
+    private Long likeCount;
 
     public Long getId() {
         return id;
@@ -114,11 +114,11 @@ public class Content {
         this.updateTime = updateTime;
     }
 
-    public Long getCategoryId() {
-        return categoryId;
+    public Long getLikeCount() {
+        return likeCount;
     }
 
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
+    public void setLikeCount(Long likeCount) {
+        this.likeCount = likeCount;
     }
 }

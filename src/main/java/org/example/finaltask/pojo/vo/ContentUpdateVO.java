@@ -6,7 +6,6 @@ public class ContentUpdateVO {
     private String imgUrl;
     private String videoUrl;
     private Long type;
-    private Long categoryId;
     private String content;
     private Long createBy;
 
@@ -48,14 +47,6 @@ public class ContentUpdateVO {
 
     public void setType(Long type) {
         this.type = type;
-    }
-
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
     }
 
     public String getContent() {

@@ -19,20 +19,19 @@ public interface UserMapper {
     //根据id查询用户头像
     String selectImgUrlById(Long id);
 
-    //根据id更改用户点赞数
-    int addLikeCountById(Long id);
 
     //根据id更改用户关注数
     int addFollowCountById(Long id);
+
+    int reduceFollowCountById(Long id);
 
     //根据id更改用户内容数
     int addContentNumById(Long id);
 
     int reduceContentNumById(Long id);
 
-    int reduceFollowCountById(Long id);
 
-    int reduceLikeCountById(Long id);
+
 
 
 

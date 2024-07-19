@@ -127,9 +127,9 @@
                                         Guide
                                     </span>
                             <el-dropdown-menu slot="dropdown" :default-active="currentIndex">
-                                <el-dropdown-item><el-button @click="turnTo(2)">Shopping</el-button></el-dropdown-item>
-                                <el-dropdown-item><el-button @click="turnTo(3)">Food</el-button></el-dropdown-item>
-                                <el-dropdown-item><el-button @click="turnTo(4)">Transportation</el-button></el-dropdown-item>
+                                <el-dropdown-item ><a @click="turnTo(2)">Shopping</a></el-dropdown-item>
+                                <el-dropdown-item ><a @click="turnTo(3)">Food</a></el-dropdown-item>
+                                <el-dropdown-item ><a @click="turnTo(4)">Transportation</a></el-dropdown-item>
                             </el-dropdown-menu>
                         </el-dropdown>
                     </el-row>
@@ -159,7 +159,7 @@
                         <el-avatar :src="user.imgUrl" style="margin-left: 10px; margin-top: 10px;"></el-avatar>
                     </div>
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item ><el-button @click="logout()">Logout</el-button></el-dropdown-item>
+                        <el-dropdown-item ><a @click="logout">Logout</a></el-dropdown-item>
                         <el-dropdown-item><a style="text-decoration: none;" href="personal.html">My Profile</a></el-dropdown-item>
                         <el-dropdown-item><a style="text-decoration: none;" href="postArticle.html">Upload Yours</a></el-dropdown-item>
                     </el-dropdown-menu>
@@ -255,7 +255,7 @@
         methods: {
             logout() {
                 console.log("logout");
-                if (confirm("您确定退出登录吗?")) {
+                if (confirm("Are you sure to log out")) {
                     axios.get("/v1/users/logout").then(() => {
                         localStorage.clear();
                         location.href = "/";
@@ -284,7 +284,7 @@
                     }
                 });
             }
-            else{
+            if((!location.search.includes("type"))&&(!location.search.includes("wd"))){
                 axios.get("/v1/contents/all").then((response) => {
                     if (response.data.code == 1) {
                         this.Arr = response.data.data;

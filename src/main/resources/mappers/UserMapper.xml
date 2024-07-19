@@ -36,12 +36,6 @@
         WHERE id = #{id}
     </select>
 
-    <update id="addLikeCountById">
-        UPDATE content
-        SET like_count = like_count + 1
-        WHERE id = #{id}
-    </update>
-
     <update id="addContentNumById">
         UPDATE user
         SET content_num = content_num + 1
@@ -54,11 +48,6 @@
         WHERE id = #{id}
     </update>
 
-    <update id="reduceLikeCountById">
-        UPDATE content
-        SET like_count = like_count - 1
-        WHERE id = #{id}
-    </update>
 
     <update id="reduceContentNumById">
         UPDATE user

@@ -29,8 +29,6 @@ public interface ContentMapper {
     //根据稿件的id查询稿件详细内容
     ContentDetailVO selectContentDetailById(Long id);
 
-    //根据作者id查询作者的其他稿件
-    List<ContentSimpleVO> selectContentOtherInfoByUserId(Long userId, Long contentId);
 
     //查询热门的稿件，返回浏览量最高的前4篇稿件
     List<ContentSimpleVO> selectContentHot();
@@ -43,6 +41,11 @@ public interface ContentMapper {
 
     //根据稿件的id增加更新浏览量
     int updateViewCountById(Long id);
+
+    //根据稿件的id增加点赞量
+    int updateLikeCountById(Long id);
+
+    int reduceLikeCountById(Long id);
 
     List<ContentSimpleVO> selectContentAll();
 

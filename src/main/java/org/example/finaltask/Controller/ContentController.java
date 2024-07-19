@@ -51,6 +51,7 @@ public class ContentController {
 
     @GetMapping("{id}/update")
     public JsonResult selectForUpdate(@PathVariable Long id){
+        System.out.println("调用了更新");
         return JsonResult.ok(contentMapper.selectUpdateInfoById(id));
     }
     @GetMapping("/management")
@@ -98,4 +99,27 @@ public class ContentController {
         System.out.println("调用了列表");
         return JsonResult.ok(contentMapper.selectContentByType(type));
     }
+
+    @GetMapping("/{id}/detail")
+    public JsonResult selectDetail(@PathVariable Long id){
+        System.out.println("调用了详情");
+        contentMapper.updateViewCountById(id);
+        return JsonResult.ok(contentMapper.selectContentDetailById(id));
+
+    }
+
+    @PostMapping("/{id}/add-like")
+    public JsonResult updateLikeCountById(@PathVariable Long id){
+        System.out.println("调用了点赞");
+        contentMapper.updateLikeCountById(id);
+        return JsonResult.ok();
+    }
+
+    @PostMapping("/{id}/reduce-like")
+    public JsonResult reduceLikeCountById(@PathVariable Long id){
+        System.out.println("调用了取消点赞");
+        contentMapper.reduceLikeCountById(id);
+        return JsonResult.ok();
+    }
+
 }

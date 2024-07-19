@@ -3,8 +3,416 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <!-- import CSS -->
+    <link rel="stylesheet" href="https://cdn.staticfile.org/element-ui/2.15.9/theme-chalk/index.css">
+
+    <style>
+        body{
+            background-color: rgb(241,242,243);
+        }
+        .el-header {
+            background-color: #409EFF;
+            color: #333;
+            text-align: center;
+            line-height: 60px;
+        }
+
+        .el-main {
+            background-color: #E9EEF3;
+            color: #333;
+            text-align: left;
+            line-height: 30px;
+        }
+
+        /*下拉菜单*/
+        .el-dropdown-link {
+            cursor: pointer;
+            color: white;
+            font-size: 20px;
+            font-weight: 1000;
+            font-family: sans-serif;
+        }
+
+        /* 修改文本按钮的默认字体颜色 */
+        .el-button--text {
+            background-color: #409EFF;
+            color: white;
+            border-radius: 30px;
+            cursor: pointer;
+            font-size: 20px;
+            padding: 10px 20px;
+            font-weight: 1000;
+            font-family: sans-serif;
+        }
+
+        /* 修改文本按钮在hover状态下的字体颜色 */
+        .el-button--text:hover {
+            background-color: #66b1ff;
+            color: white;
+            cursor: pointer;
+
+        }
+
+        .custom-dropdown {
+            background-color: #409EFF;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+        }
+
+        .custom-dropdown:hover {
+            background-color: #66b1ff;
+            cursor: pointer;
+        }
+
+        .el-dropdown-menu {
+            padding-top: 10px;
+            border-radius: 30px;
+            background-color: rgba(217, 225, 230, 0.95);
+            box-shadow: 0px 4px 8px;
+        }
+
+        .el-dropdown-menu__item {
+            padding: 10px 20px;
+            color: #7d9ded;
+            font-family: "Arial Black";
+            font-size: 15px;
+        }
+
+        .el-dropdown-menu__item:hover {
+            background-color: #f2f6fc;
+            color: #409EFF;
+            border-radius: 15px;
+            font-family: "Arial Black";
+            font-size: 20px;
+        }
+
+        .title-p{
+            height: 40px;
+            overflow: hidden;
+            /*设置超出的部分用省略号展示*/
+            display: -webkit-box;
+            -webkit-line-clamp:2; /*设置显示的行数*/
+            -webkit-box-orient: vertical;  /*设置纵向排列*/
+            margin: 0;
+        }
+
+        #likeButton {
+            border-radius: 90px;
+            background-color: #F0F0F0;
+            border: 1px solid #ccc;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        #likeButton.active {
+            background-color: #409EFF;
+            color: white;
+        }
+
+        #followButton {
+            border-radius: 10px;
+            background-color: #409EFF;
+            color: #F0F0F0;
+            border: 1px solid #ccc;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        #followButton.followed {
+            background-color: #F0F0F0;
+            color: grey;
+            border-color: #808080;
+        }
+
+    </style>
 </head>
 <body>
+<div id="app">
+    <el-container>
+        <el-header>
+            <el-row>
+                <el-col :span="6"><a href="/"><el-button round style="margin: auto;font-family: 'Arial Black'; color: #a6bed7;font-size: 15px;">Return</el-button></a></el-col>
+                <el-col :span="12">
+                    <el-col :span="3">
+                        <el-row style="margin-left: 150px">
+                            <el-dropdown>
+                                    <span class="el-dropdown-link custom-dropdown">
+                                        Guide
+                                    </span>
+                                <el-dropdown-menu slot="dropdown" :default-active="currentIndex">
+                                    <el-dropdown-item><a @click="turnTo(2)">Shopping</a></el-dropdown-item>
+                                    <el-dropdown-item><a @click="turnTo(3)">Food</a></el-dropdown-item>
+                                    <el-dropdown-item><a @click="turnTo(4)">Transportation</a></el-dropdown-item>
+                                </el-dropdown-menu>
+                            </el-dropdown>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-row style="margin-left: 200px">
+                            <el-button round type="text" @click="turnTo(5)">Sights</el-button>
+                        </el-row>
+                    </el-col>
+                    <el-col :span="3">
+                        <el-row style="margin-left: 250px">
+                            <el-button round type="text" @click="turnTo(6)">Video</el-button>
+                        </el-row>
+                    </el-col>
+                </el-col>
+                <el-col :span="3" style="margin-left: auto; margin-right: 20px;">
+                    <!-- 用户未登录 -->
+                    <div v-if="user==null">
+                        <a href="login.html">
+                            <el-button round style="margin: auto; font-family: 'Arial Black'; color: #a6bed7; font-size: 15px;">
+                                Sign in
+                            </el-button>
+                        </a>
+                    </div>
+                    <el-dropdown v-else>
+                        <div>
+                            <el-avatar :src="user.imgUrl" style="margin-left: 10px; margin-top: 10px;"></el-avatar>
+                        </div>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item ><a @click="logout">Logout</a></el-dropdown-item>
+                            <el-dropdown-item><a style="text-decoration: none;" href="personal.html">My Profile</a></el-dropdown-item>
+                            <el-dropdown-item><a style="text-decoration: none;" href="postArticle.html">Upload Yours</a></el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </el-col>
+            </el-row>
+        </el-header>
+        <el-main>
+            <div style="border-radius: 30px;margin-top: 5px;margin-left: 240px;margin-right: 200px;width: 1000px;box-shadow: 20px 20px 20px 20px rgba(0, 0, 0, 0.05)">
+            <el-row style="border-radius: 30px;height: 190px">
+                <h2 style="color: #66b1ff;text-align: center;height: 50px;font-size: 50px;margin-top: 50px;margin-bottom: 0">{{c.title}}</h2>
+                <p style="font-size: 12px;color: #666;text-align: center;height: 30px"> Hit: {{c.viewCount}} | Likes: {{c.likeCount}} | Upload Time: {{c.createTime}} </p>
+                <el-row>
+                    <el-col :span="8"><el-avatar :src="c.userImgUrl" style="margin-left: 300px; margin-top: 10px;height: 40px;width: 40px"></el-avatar></el-col>
+                    <el-col :span="4"><p style="margin-left: 20px;width: 100px">{{c.nickname}}</p></el-col>
+                    <el-col :span="8" style="margin-top: 15px;margin-left: 10px"><button id="followButton">FOLLOW</button></el-col>
+                </el-row>
+                <el-divider></el-divider>
+            </el-row>
+            <el-row style="padding: 40px;padding-top: 20px;margin-top: 30px">
+                    <div v-if="c.type!='6'">
+                        <p v-html="c.content"></p>
+                    </div>
+                    <div v-else>
+                        <video style="width: 100%" :src="c.videoUrl" controls type="video/mp4"></video>
+                    </div>
+                </el-row>
+                <el-divider></el-divider>
+                <el-row style="padding: 40px;padding-top: 20px">
+                <el-row>
+                    <el-col :span="21">
+                    <h3 style="height: 70px;font-size: 30px;margin-top: 0;margin-bottom: 0">Share Your Thoughts</h3>
+                    </el-col>
+                    <el-col :span="3" style="margin-left: 0px">
+                        <button id="likeButton">LIKE</button>
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <el-col :span="24">
+                        <el-input v-model="comment.content" type="textarea" placeholder="Please enter content" style="width: 900px;height: 70px"></el-input>
+                    </el-col>
+                    <el-col :span="4" style="height: 50px;margin-left: 800px">
+                        <el-button type="primary" round @click="post()">Comment</el-button>
+                    </el-col>
+                </el-row>
+                <el-row v-for="c in commentArr" style="margin-top: 20px">
+                    <el-col :span="2">
+                        <el-avatar :src="c.userImgUrl" style="margin-left: 10px; margin-top: 10px;height: 50px;width: 50px"></el-avatar>
+                    </el-col>
+                    <el-col :span="2" style="margin-top: 20px">
+                        <span style="font-size: 20px">{{c.nickname}}</span>
+                    </el-col>
+                    <el-col>
+                        <p style="margin-bottom: 0;margin-top: 0">{{c.content}}</p>
+                        <span>{{c.createTime}}</span>
+                    </el-col>
+                </el-row>
+                </el-row>
+            </div>
+        </el-main>
+        <el-footer class="footer" style=" height: 250px;background-color: #e4e9ed;">
+            <div class="FooterDiv" style="color: darkgray;text-align:left;width: 1200px;margin:0 auto">
+                <el-row style="margin-left: 150px">
+                    <el-col span="16" style="margin-top: 20px; width: 170px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">User Service</p>
+                        <p style="font-size: small;margin-top: 0;margin-bottom: 10px">User Agreement</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Privacy Policy</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Rights Protection</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Online Service</p>
+                    </el-col>
+                    <el-col span="16" style="margin-top: 20px;width: 170px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">Follow Us</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Sina Weibo</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">WeChat</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Xiaohongshu</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">TikTok</p>
+                    </el-col>
+                    <el-col span="16" style="margin-top: 20px;width: 170px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top: 0px">Help Center</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Common Problem</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Sitemap</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Feedback</p>
+                    </el-col>
+                    <el-col span="16" style="margin-top: 20px;width: 300px">
+                        <p style="color: #5e5e5e;margin-bottom: 5px;margin-top:0">Contact Number</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">North America：+1 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Europe：+44 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Asia Pacific：+86 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">India：+91 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">South America：+55 400-000-0000</p>
+                        <p style="font-size: small;margin-bottom: 10px;margin-top: 0">Africa：+86 400-000-0000</p>
+                    </el-col>
+                    <el-col span="5" style="margin-top: 20px;width: 170px">
+                        <img src="imgs/imgForFooter.png" width="78.6px" height="78.3px"><br>
+                        <img src="imgs/imgForPay.png" width="78.6px" height="78.3px">
+                    </el-col>
+                </el-row>
+                <el-row>
+                    <p style="text-align: center;font-size: smaller;color: darkgray;">Copyright © 2024 - future IKUN Travel All Rights Reserved</p>
+                </el-row>
+            </div>
+        </el-footer>
+    </el-container>
+</div>
 
+<!-- import Vue before Element -->
+<script src="https://cdn.staticfile.org/vue/2.6.14/vue.min.js"></script>
+<!-- import JavaScript -->
+<script src="https://cdn.staticfile.org/element-ui/2.15.9/index.min.js"></script>
+<!--引入Axios-->
+<script src="https://cdn.bootcss.com/axios/0.18.0/axios.min.js"></script>
+
+<script>
+
+    let v = new Vue({
+        el: '#app',
+        data(){
+            return {
+                c:{},
+                input: '',
+                currentIndex: "",
+                user: localStorage.user ? JSON.parse(localStorage.user) : null,
+                comment:{content:""},
+                commentArr:[],
+            }
+        },
+        methods: {
+            post(){
+                if(v.comment.content.trim()==""){
+                    v.$message.error("COMMENTS CANNOT BE EMPTY");
+                    return;
+                }
+                let user = localStorage.user ? JSON.parse(localStorage.user) : null;
+                if(user==null){
+                    alert("PLEASE LOG IN FIRST");
+                    location.href = "/login.html";
+                    return;
+                }
+                v.comment.userId = user.id;
+                v.comment.contentId = v.c.id;
+
+                axios.post("v1/comments/add-new",v.comment).then(function (response){
+                    if(response.data.code==1){
+                        alert("SUCCESS");
+                        v.comment.content = "";
+                        v.loadComment(v.c.id);
+                    }else{
+                        alert("Login Timed Out");
+                        location.href = "/login.html";
+                    }
+                })
+            },
+            loadComment(id){
+                axios.get("/v1/comments/"+id).then(function (response){
+                    if(response.data.code==1) {
+                        v.commentArr = response.data.data;
+                    }
+                })
+            },
+            logout() {
+                console.log("logout");
+                if (confirm("Are you sure to log out?")) {
+                    axios.get("/v1/users/logout").then(function () {
+                        localStorage.clear();
+                        location.href = "/";
+                    })
+                }
+
+            },
+
+            turnTo(key) {
+                location.href = "/contentList.html?type=" + key;
+            },
+        },
+        created: function () {
+            let id=new URLSearchParams(location.search).get("id");
+            axios.get("/v1/contents/" + id+ "/detail").then(function (response) {
+                v.c = response.data.data;
+                console.log(v.c);
+            })
+            this.loadComment(id);
+
+        },
+
+    })
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const followButton = document.getElementById('followButton');
+        const likeButton = document.getElementById("likeButton");
+
+        followButton.addEventListener('click', function() {
+            if (this.classList.contains('followed')) {
+                this.classList.remove('followed');
+                this.textContent = 'FOLLOW';
+                axios.post("/v1/users/" + v.c.createBy + "/reduce-follower").then(function (response) {
+                    if (response.data.code == 1) {
+                        v.c.followCount--;
+                    }
+                })
+                console.log('已取消关注');
+            } else {
+                this.classList.add('followed');
+                this.textContent = 'FOLLOWED';
+                axios.post("/v1/users/" + v.c.createBy + "/add-follower").then(function (response) {
+                    if (response.data.code == 1) {
+                        v.c.followCount++;
+                    }
+                })
+                console.log('关注成功');
+            }
+        });
+
+    likeButton.addEventListener("click", function() {
+        if (this.classList.contains("active")) {
+            this.classList.remove("active");
+            this.textContent = 'LIKE';
+            axios.post("/v1/contents/" + v.c.id + "/reduce-like").then(function (response) {
+                if (response.data.code == 1) {
+                    v.c.likeCount--;
+                }
+            })
+            console.log("点赞已取消");
+        } else {
+            this.classList.add("active");
+            this.textContent = 'LIKED';
+            axios.post("/v1/contents/" + v.c.id + "/add-like").then(function (response) {
+                if (response.data.code == 1) {
+                    v.c.likeCount++;
+                }
+            })
+            console.log("点赞成功");
+        }
+    });
+    });
+</script>
 </body>
+
+
 </html>
